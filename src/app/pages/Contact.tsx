@@ -6,14 +6,14 @@ import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { SupportChat } from "../components/SupportChat"; // ✅ Import
+import { SupportChat } from "../../components/SupportChat"; // ✅ Fixed path
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [showChat, setShowChat] = useState(false); // ✅ Chat open/close state
+  const [showChat, setShowChat] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -118,7 +118,6 @@ export default function Contact() {
               </CardContent>
             </Card>
 
-            {/* ✅ Quick Support — Live Chat button kaam karta hai ab */}
             <Card>
               <CardHeader>
                 <CardTitle>Quick Support</CardTitle>
@@ -127,7 +126,7 @@ export default function Contact() {
                 <Button
                   className="w-full justify-start"
                   variant="outline"
-                  onClick={() => setShowChat(true)} // ✅ Chat open karo
+                  onClick={() => setShowChat(true)}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Live Chat Support
