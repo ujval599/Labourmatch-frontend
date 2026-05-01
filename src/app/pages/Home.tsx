@@ -9,7 +9,7 @@ import { ContractorCard } from "../components/ContractorCard";
 import { TrustBadge } from "../components/TrustBadge";
 import { useAuth } from "../../context/AuthContext";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
 
 // ✅ Hero background images — public/images/ folder mein save karo
 const HERO_IMAGES = [

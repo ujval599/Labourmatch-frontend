@@ -1,4 +1,13 @@
 // src/app/pages/ContractorProfile.tsx
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router";
 import {
@@ -11,7 +20,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
 
 function getToken() { return localStorage.getItem("token"); }
 

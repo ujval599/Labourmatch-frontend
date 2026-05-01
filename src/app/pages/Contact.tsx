@@ -1,3 +1,14 @@
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
+
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, Clock, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
@@ -8,7 +19,7 @@ import { Button } from "../components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { SupportChat } from "../../components/SupportChat"; // ✅ Fixed path
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
