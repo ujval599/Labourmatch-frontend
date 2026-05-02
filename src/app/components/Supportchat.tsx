@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Send, X, MessageCircle, CheckCheck, Clock, Headphones, ChevronDown } from "lucide-react";
 
 // ✅ FIX 1: /api add kiya
-const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
 
 interface Message {
   id: string;
