@@ -23,21 +23,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// ✅ Backend se check karo — yeh user contractor bhi hai? (verified ya unverified dono)
+// ✅ Backend se check karo — phone se contractor hai ya nahi
 async function checkIfContractor(phone: string): Promise<boolean> {
   try {
-    // Contractor apna profile check kare
     const { data } = await api.get(`/contractors/check?phone=${phone}`);
     return !!data.isContractor;
   } catch {
-    try {
-      // Fallback — sab contractors mein dhundo (admin route)
-      const { data } = await api.get(`/contractors/admin/all`);
-      if (data.success && data.data?.length > 0) {
-        const found = data.data.find((c: any) => c.phone === phone);
-        return !!found;
-      }
-    } catch {}
     return false;
   }
 }
@@ -53,7 +44,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const stored = authService.getCurrentUser();
     if (stored && authService.isLoggedIn()) {
       setUser(stored);
-      // ✅ Admin check
       if (stored.role === "ADMIN") {
         setSelectedRoleState("user");
       }
@@ -68,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     else localStorage.removeItem("selectedRole");
   };
 
-  // ✅ Login ke baad contractor check karo
+  // ✅ FIX: Login ke baad HAMESHA database se check karo
   const login = async (phone: string, password: string) => {
     const result = await authService.login(phone, password);
     if (result.success) {
@@ -80,14 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // ✅ Pehle localStorage check karo
-      const savedRole = localStorage.getItem("selectedRole") as SelectedRole;
-      if (savedRole === "contractor") {
-        // Already contractor — raho
-        return;
-      }
-
-      // ✅ Backend se check karo — contractor hai?
+      // ✅ FIX: localStorage ignore karo — hamesha fresh database check karo
       const isContractorUser = await checkIfContractor(phone);
       if (isContractorUser) {
         setSelectedRole("contractor");
@@ -109,9 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const savedRole = localStorage.getItem("selectedRole") as SelectedRole;
-      if (savedRole === "contractor") return;
-
+      // ✅ FIX: OTP login mein bhi fresh check karo
       const isContractorUser = await checkIfContractor(result.user.phone);
       if (isContractorUser) {
         setSelectedRole("contractor");
@@ -125,8 +106,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (name: string, phone: string, email: string, password: string) => {
     const result = await authService.register(name, phone, email, password);
-    if (result.success) setUser(result.user);
-    else throw new Error(result.message);
+    if (result.success) {
+      setUser(result.user);
+      // ✅ FIX: Register ke baad role clear karo — user hai contractor nahi
+      setSelectedRole("user");
+    } else {
+      throw new Error(result.message);
+    }
   };
 
   const sendOTP = async (phone: string) => {
@@ -135,10 +121,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { otp: result.otp };
   };
 
+  // ✅ FIX: Logout pe localStorage bhi clear karo
   const logout = () => {
     authService.logout();
     setUser(null);
-    setSelectedRole(null);
+    setSelectedRoleState(null);
+    localStorage.removeItem("selectedRole");
   };
 
   return (
