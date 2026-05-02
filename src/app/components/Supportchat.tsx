@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { Send, X, MessageCircle, CheckCheck, Clock, Headphones, ChevronDown, Minimize2 } from "lucide-react";
+import { Send, X, MessageCircle, CheckCheck, Clock, Headphones, ChevronDown } from "lucide-react";
 
-// ✅ FIX: Production URL use karo
-const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
+// ✅ FIX 1: /api add kiya
+const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com/api";
 
 interface Message {
   id: string;
@@ -14,9 +14,10 @@ interface Message {
 
 interface SupportChatProps {
   defaultOpen?: boolean;
+  onClose?: () => void; // ✅ FIX 2: onClose prop add kiya
 }
 
-export function SupportChat({ defaultOpen = false }: SupportChatProps) {
+export function SupportChat({ defaultOpen = false, onClose }: SupportChatProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -29,6 +30,7 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
 
   const token = localStorage.getItem("token");
 
+  // ✅ FIX 3: defaultOpen change hone pe open karo
   useEffect(() => {
     if (defaultOpen) setIsOpen(true);
   }, [defaultOpen]);
@@ -36,7 +38,7 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
   const fetchMessages = async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${BASE_URL}/api/support`, {
+      const res = await fetch(`${BASE_URL}/support`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -73,6 +75,11 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
     }
   }, [isOpen]);
 
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose?.(); // ✅ FIX 4: parent ko bhi notify karo
+  };
+
   const sendMessage = async () => {
     if (!newMessage.trim() || sending || !token) return;
     setSending(true);
@@ -89,7 +96,7 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
     setMessages((prev) => [...prev, tempMsg]);
 
     try {
-      const res = await fetch(`${BASE_URL}/api/support`, {
+      const res = await fetch(`${BASE_URL}/support`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,9 +107,13 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
       const data = await res.json();
       if (data.success) {
         setMessages((prev) => prev.map((m) => (m.id === tempMsg.id ? data.data : m)));
+      } else {
+        setMessages((prev) => prev.filter((m) => m.id !== tempMsg.id));
+        setNewMessage(text);
       }
     } catch {
       setMessages((prev) => prev.filter((m) => m.id !== tempMsg.id));
+      setNewMessage(text);
     } finally {
       setSending(false);
       inputRef.current?.focus();
@@ -111,9 +122,7 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
 
   const formatTime = (dateStr: string) => {
     return new Date(dateStr).toLocaleTimeString("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
+      hour: "2-digit", minute: "2-digit", hour12: true,
     });
   };
 
@@ -139,8 +148,8 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
           onClick={() => setIsOpen(!isOpen)}
           className={`w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 ${
             isOpen
-              ? "bg-gray-600 rotate-0 scale-95"
-              : "bg-gradient-to-br from-orange-500 to-amber-500 hover:scale-110 hover:shadow-orange-200"
+              ? "bg-gray-600 scale-95"
+              : "bg-gradient-to-br from-orange-500 to-amber-500 hover:scale-110"
           }`}
         >
           {isOpen
@@ -148,13 +157,6 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
             : <MessageCircle className="h-6 w-6 text-white" />
           }
         </button>
-
-        {/* Tooltip */}
-        {!isOpen && (
-          <div className="absolute bottom-16 right-0 bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none shadow-lg">
-            Live Support
-          </div>
-        )}
       </div>
 
       {/* ── Chat Window ── */}
@@ -166,7 +168,6 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
         }`}
         style={{ width: "360px", height: "520px" }}
       >
-        {/* ── Outer Shadow Container ── */}
         <div className="flex flex-col h-full rounded-2xl overflow-hidden shadow-2xl border border-gray-200/50">
 
           {/* Header */}
@@ -182,7 +183,7 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
               <p className="text-white/80 text-xs">Online • Typically replies in minutes</p>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
               className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
             >
               <ChevronDown className="h-4 w-4 text-white" />
@@ -225,7 +226,6 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
 
                 return (
                   <div key={msg.id}>
-                    {/* Date separator */}
                     {showDate && (
                       <div className="flex items-center gap-2 my-2">
                         <div className="flex-1 h-px bg-gray-200" />
@@ -237,7 +237,6 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
                     )}
 
                     <div className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
-                      {/* Admin avatar */}
                       {!isUser && (
                         <div className="w-7 h-7 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm">
                           <Headphones className="h-3.5 w-3.5 text-white" />
@@ -262,7 +261,6 @@ export function SupportChat({ defaultOpen = false }: SupportChatProps) {
                         </div>
                       </div>
 
-                      {/* User avatar */}
                       {isUser && (
                         <div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 text-gray-500 font-bold text-xs">
                           {(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!).name?.charAt(0)?.toUpperCase() : "U") || "U"}
