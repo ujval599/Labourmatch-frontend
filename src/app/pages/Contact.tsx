@@ -1,14 +1,4 @@
-/// <reference types="vite/client" />
-
-interface ImportMetaEnv {
-  readonly VITE_API_URL: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
-
-
+// src/app/pages/Contact.tsx
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, Clock, MessageCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
@@ -17,9 +7,9 @@ import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { SupportChat } from "../../components/SupportChat"; // ✅ Fixed path
+import { SupportChat } from "../components/SupportChat";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
+const BASE_URL = (import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com");
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -59,10 +49,15 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleOpenChat = () => {
+    setShowChat(false);
+    setTimeout(() => setShowChat(true), 50);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* ✅ SupportChat — floating chat widget */}
-      <SupportChat defaultOpen={showChat} />
+      {/* ✅ FIX: SupportChat — sahi import path */}
+      <SupportChat defaultOpen={showChat} onClose={() => setShowChat(false)} />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary/10 via-secondary/5 to-accent py-20 px-4">
@@ -134,10 +129,10 @@ export default function Contact() {
                 <CardTitle>Quick Support</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                {/* ✅ FIX: Live Chat button — seedha open karo */}
                 <Button
-                  className="w-full justify-start"
-                  variant="outline"
-                  onClick={() => setShowChat(true)}
+                  className="w-full justify-start bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:opacity-90 border-0"
+                  onClick={handleOpenChat}
                 >
                   <MessageCircle className="h-4 w-4 mr-2" />
                   Live Chat Support
@@ -164,10 +159,10 @@ export default function Contact() {
               <CardContent>
                 {submitted ? (
                   <div className="py-12 text-center">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Send className="h-8 w-8 text-primary" />
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Send className="h-8 w-8 text-green-600" />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">Message Sent!</h3>
+                    <h3 className="text-xl font-bold mb-2">Message Sent! ✅</h3>
                     <p className="text-muted-foreground">
                       Thank you for contacting us. We'll get back to you soon.
                     </p>
@@ -245,8 +240,8 @@ export default function Contact() {
                   { q: "Is there a fee to use the platform?", a: "For customers, browsing and contacting contractors is completely free. Contractors can register for free as well." },
                   { q: "What areas do you cover?", a: "We currently operate in major cities across India, with contractors available in Mumbai, Delhi, Bangalore, and 20+ other cities." },
                 ].map((faq, i) => (
-                  <div key={i}>
-                    <h3 className="font-semibold mb-2">{faq.q}</h3>
+                  <div key={i} className="p-4 bg-gray-50 rounded-xl">
+                    <h3 className="font-semibold mb-2 text-gray-800">{faq.q}</h3>
                     <p className="text-sm text-muted-foreground">{faq.a}</p>
                   </div>
                 ))}
