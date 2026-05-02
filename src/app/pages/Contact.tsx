@@ -7,7 +7,7 @@ import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { SupportChat } from "../components/SupportChat";
+import { SupportChat } from "../components/Supportchat";
 
 const BASE_URL = (import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com");
 
@@ -56,7 +56,6 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* ✅ FIX: SupportChat — sahi import path */}
       <SupportChat defaultOpen={showChat} onClose={() => setShowChat(false)} />
 
       {/* Hero Section */}
@@ -129,7 +128,6 @@ export default function Contact() {
                 <CardTitle>Quick Support</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {/* ✅ FIX: Live Chat button — seedha open karo */}
                 <Button
                   className="w-full justify-start bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:opacity-90 border-0"
                   onClick={handleOpenChat}
