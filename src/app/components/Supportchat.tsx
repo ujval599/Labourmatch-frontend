@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, X, MessageCircle, CheckCheck, Clock, Headphones, ChevronDown } from "lucide-react";
 
-// ✅ FIX 1: /api add kiya
-const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
+// ✅ FIX: BASE_URL from env, /api strip karo end se
+const BASE_URL = (import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com/api").replace(/\/api$/, "");
 
 interface Message {
   id: string;
@@ -14,7 +14,7 @@ interface Message {
 
 interface SupportChatProps {
   defaultOpen?: boolean;
-  onClose?: () => void; // ✅ FIX 2: onClose prop add kiya
+  onClose?: () => void;
 }
 
 export function SupportChat({ defaultOpen = false, onClose }: SupportChatProps) {
@@ -30,7 +30,6 @@ export function SupportChat({ defaultOpen = false, onClose }: SupportChatProps) 
 
   const token = localStorage.getItem("token");
 
-  // ✅ FIX 3: defaultOpen change hone pe open karo
   useEffect(() => {
     if (defaultOpen) setIsOpen(true);
   }, [defaultOpen]);
@@ -38,7 +37,7 @@ export function SupportChat({ defaultOpen = false, onClose }: SupportChatProps) 
   const fetchMessages = async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${BASE_URL}/support`, {
+      const res = await fetch(`${BASE_URL}/api/support`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -77,7 +76,7 @@ export function SupportChat({ defaultOpen = false, onClose }: SupportChatProps) 
 
   const handleClose = () => {
     setIsOpen(false);
-    onClose?.(); // ✅ FIX 4: parent ko bhi notify karo
+    onClose?.();
   };
 
   const sendMessage = async () => {
@@ -96,7 +95,7 @@ export function SupportChat({ defaultOpen = false, onClose }: SupportChatProps) 
     setMessages((prev) => [...prev, tempMsg]);
 
     try {
-      const res = await fetch(`${BASE_URL}/support`, {
+      const res = await fetch(`${BASE_URL}/api/support`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
