@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { AuthProvider } from "../context/AuthContext";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function Root() {
   return (
@@ -13,6 +14,7 @@ export default function Root() {
         </main>
         <Footer />
       </div>
+      <Analytics />
     </AuthProvider>
   );
 }
