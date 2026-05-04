@@ -20,7 +20,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
+const BASE_URL = (import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com/api").replace(/\/api$/, "");
 
 function getToken() { return localStorage.getItem("token"); }
 
