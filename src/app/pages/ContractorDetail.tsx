@@ -9,8 +9,7 @@ import {
   Trash, PenLine, CalendarCheck, FileText
 } from "lucide-react";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com";
-
+const BASE_URL = (import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com/api").replace(/\/api$/, "");
 function getToken(): string | null { return localStorage.getItem("token"); }
 function getCurrentUser(): { id: string; name: string; phone?: string } | null {
   try { const raw = localStorage.getItem("user"); return raw ? JSON.parse(raw) : null; }
