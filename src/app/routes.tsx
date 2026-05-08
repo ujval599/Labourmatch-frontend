@@ -69,10 +69,10 @@ function LoginRequiredModal({ onClose, onLogin, countdown }: {
           Join LabourMatch! 🚀
         </h2>
         <p className="text-center text-gray-500 mb-2 text-sm leading-relaxed">
-          Tumne hamara platform dekha — ab login karke full access lo!
+          You’ve seen our platform — now log in to get full access!
         </p>
         <p className="text-center text-gray-400 mb-6 text-xs">
-          Find verified contractors • Book instantly • Chat directly
+         Find verified contractors • Book instantly • Chat directly.
         </p>
 
         {/* Buttons */}
@@ -82,13 +82,11 @@ function LoginRequiredModal({ onClose, onLogin, countdown }: {
             className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-all shadow-md hover:shadow-lg hover:opacity-90 active:scale-95"
             style={{ background: "linear-gradient(135deg, #16a34a, #0d9488)" }}
           >
-            🔐 Login / Sign Up — It's Free!
+            🔐 Login / Sign Up 
           </button>
         </div>
 
-        <p className="text-center text-gray-400 text-xs mt-4">
-          100% Free • No credit card required
-        </p>
+        
       </div>
     </div>
   );
