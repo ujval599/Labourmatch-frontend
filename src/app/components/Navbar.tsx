@@ -76,23 +76,27 @@ export function Navbar() {
                   </div>
                 )}
 
-                {/* ✅ User Badge — Contractor ho to profile pe le jao */}
+                {/* ✅ User Badge */}
                 <div
                   onClick={() => isContractor ? navigate("/my-profile") : navigate("/my-bookings")}
-                  className="flex items-center gap-2 bg-orange-50 border border-orange-200 px-3 py-2 rounded-xl cursor-pointer hover:bg-orange-100 transition-all"
+                  className="flex items-center gap-2 bg-orange-50 border border-orange-200 px-3 py-2 rounded-xl cursor-pointer hover:bg-orange-100 transition-all group"
                   title={isContractor ? "View My Profile" : "My Bookings"}
                 >
                   <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
                     <User className="h-4 w-4 text-white" />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700 max-w-[120px] truncate">
-                    {user.name}
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-gray-700 max-w-[120px] truncate leading-tight">
+                      {user.name}
+                    </span>
+                    {/* ✅ FIX: Sirf contractor ko dikhao */}
+                    {isContractor && (
+                      <span className="text-[10px] text-orange-500 font-medium leading-tight group-hover:text-orange-600">
+                        See Your Profile →
+                      </span>
+                    )}
+                  </div>
                 </div>
-
-              
-
-                
 
                 {/* Logout */}
                 <Button onClick={handleLogout} variant="ghost"
@@ -126,7 +130,7 @@ export function Navbar() {
               </Link>
             ))}
 
-            {/* ✅ Mobile — Contractor Profile link */}
+            {/* Mobile — Contractor Profile link */}
             {isContractor && (
               <Link to="/my-profile"
                 className="block py-3 text-amber-600 hover:text-amber-700 transition-colors font-medium"
@@ -140,7 +144,7 @@ export function Navbar() {
                 <>
                   <div
                     onClick={() => { isContractor ? navigate("/my-profile") : navigate("/my-bookings"); setMobileMenuOpen(false); }}
-                    className="flex items-center gap-2 bg-orange-50 border border-orange-200 px-3 py-2.5 rounded-xl cursor-pointer"
+                    className="flex items-center gap-2 bg-orange-50 border border-orange-200 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-orange-100 transition-all"
                   >
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0">
                       <User className="h-4 w-4 text-white" />
@@ -150,6 +154,12 @@ export function Navbar() {
                         {isAdmin ? "Admin" : isContractor ? "Contractor" : "User"}
                       </p>
                       <p className="text-sm font-semibold text-gray-700">{user.name}</p>
+                      {/* ✅ FIX: Mobile mein bhi sirf contractor ko dikhao */}
+                      {isContractor && (
+                        <p className="text-[10px] text-orange-500 font-medium">
+                          See Your Profile →
+                        </p>
+                      )}
                     </div>
                   </div>
                   <Button onClick={handleLogout} variant="outline"
