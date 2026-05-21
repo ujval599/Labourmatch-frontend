@@ -85,7 +85,7 @@ export default function Contact() {
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
                     <p className="text-sm text-muted-foreground">+91 8128860779</p>
-                    <p className="text-sm text-muted-foreground">+91 98765 43211</p>
+                    
                   </div>
                 </div>
 
