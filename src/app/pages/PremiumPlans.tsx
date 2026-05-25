@@ -14,7 +14,7 @@ const PLANS = [
     duration: "1 Month",
     amount: 699,
     popular: false,
-    razorpayLink: "https://rzp.io/rzp/SCxo4M3",
+    razorpayLink: "https://rzp.io/rzp/zItieVNC",
     features: [
       "Profile listed at top for 1 month",
       "Priority in search results",
@@ -28,7 +28,7 @@ const PLANS = [
     duration: "3 Months",
     amount: 1499,
     popular: true,
-    razorpayLink: "https://rzp.io/rzp/GIVvzg6F",
+    razorpayLink: "https://rzp.io/rzp/zVoVNymV",
     features: [
       "Profile listed at top for 3 months",
       "Priority in search results",
@@ -43,7 +43,7 @@ const PLANS = [
     duration: "1 Year",
     amount: 4999,
     popular: false,
-    razorpayLink: "https://rzp.io/rzp/NPApJvv",
+    razorpayLink: "https://rzp.io/rzp/SKVB4k8W",
     features: [
       "Profile listed at top for 1 year",
       "Highest priority in search results",
