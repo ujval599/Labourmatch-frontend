@@ -57,7 +57,7 @@ export default function Home() {
 
   // ── Contractors fetch ───────────────────────────────────────────
   useEffect(() => {
-    fetch(`${BASE_URL}/api/contractors?limit=6&sortBy=rating`)
+    fetch(`${BASE_URL}/api/contractors?limit=6&verified=true`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
