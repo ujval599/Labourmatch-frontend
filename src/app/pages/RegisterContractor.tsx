@@ -1,5 +1,4 @@
 // src/app/pages/RegisterContractor.tsx
-
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { CheckCircle, UserPlus, Loader2, ImagePlus, X, MapPin } from "lucide-react";
@@ -10,7 +9,6 @@ import { Textarea } from "../components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import contractorService from "../../services/contractor.service";
-
 // ── Gujarat ke saare cities + areas ──────────────────────────────
 const GUJARAT_LOCATIONS = [
   // Major Cities
@@ -19,7 +17,6 @@ const GUJARAT_LOCATIONS = [
   "Surendranagar", "Bharuch", "Valsad", "Navsari", "Porbandar", "Amreli",
   "Botad", "Dahod", "Patan", "Palanpur", "Godhra", "Veraval", "Dwarka",
   "Kutch", "Bhuj", "Gandhidham", "Mundra", "Anjar", "Mandvi",
-
   // Ahmedabad Areas
   "Maninagar", "Navrangpura", "Satellite", "Bopal", "Gota", "Chandkheda",
   "Naroda", "Vatva", "Odhav", "Nikol", "Vastral", "Isanpur", "Bapunagar",
@@ -28,33 +25,27 @@ const GUJARAT_LOCATIONS = [
   "Vejalpur", "Jivraj Park", "Lambha", "Sanand", "Bavla", "Dholka",
   "Dholera", "Viramgam", "Bareja", "Sarkhej", "Ghuma", "Shela", "Tragad",
   "Kukatpally", "Bhadaj", "Ambawadi", "Law Garden", "CG Road", "SG Highway",
-
   // Surat Areas
   "Adajan", "Vesu", "Pal", "Katargam", "Udhna", "Sachin", "Dumas",
   "Piplod", "Bhatar", "Althan", "City Light", "Rander", "Limbayat",
   "Varachha", "Salabatpura", "Nanpura", "Chowk Bazaar", "Ring Road Surat",
   "Parvat", "Amroli", "Sarthana", "Kamrej", "Olpad", "Bardoli", "Vyara",
   "Mandvi Surat", "Mahuva", "Songadh", "Tapi",
-
   // Vadodara Areas
   "Alkapuri", "Fatehgunj", "Gotri", "Karelibaug", "Manjalpur", "Nizampura",
   "Waghodia Road", "Harni", "Makarpura", "Sama", "Akota", "Gorwa",
   "Chhani", "Padra", "Karjan", "Dabhoi", "Sinor", "Kawant",
-
   // Rajkot Areas
   "Kalawad Road", "Gondal Road", "Mavdi", "Aji Dam Road", "150 Feet Ring Road",
   "Bhaktinagar", "Raiya Road", "Kothariya", "Pedak Road", "University Road",
   "Kalavad", "Gondal", "Jasdan", "Wankaner", "Morbi Road",
-
   // Mehsana & North Gujarat
   "Unjha", "Visnagar", "Kheralu", "Satlasana", "Harij", "Radhanpur",
   "Chanasma", "Kadi", "Kalol", "Himmatnagar", "Idar", "Modasa",
   "Bayad", "Bhiloda", "Prantij", "Talod", "Shamlaji", "Vadnagar",
-
   // South Gujarat
   "Bilimora", "Chikhli", "Gandevi", "Vapi", "Silvassa", "Umbergaon",
   "Pardi", "Bulsar", "Dharampur", "Kaprada", "Dang", "Ahwa",
-
   // Saurashtra Region
   "Jetpur", "Dhoraji", "Upleta", "Vinchhiya", "Paddhari", "Lodhika",
   "Khambhalia", "Okha", "Kalyanpur", "Bhanvad", "Jamkhambhalia",
@@ -64,12 +55,10 @@ const GUJARAT_LOCATIONS = [
   "Manavadar", "Visavadar", "Mendarda", "Talala", "Kodinar",
   "Sutrapada", "Chotila", "Sayla", "Wadhwan", "Muli", "Dhrangadhra",
   "Halvad", "Limbdi", "Lakhtar", "Dasada", "Patdi",
-
   // Kutch Region
   "Rapar", "Nakhatrana", "Abdasa", "Lakhpat", "Bhachau", "Dudhai",
   "Khavda", "Dayapar", "Vondh", "Samakhyali",
 ];
-
 // ── City Autocomplete Component ───────────────────────────────────
 function LocationAutocomplete({
   id, name, label, placeholder, value, onChange, required = false,
@@ -81,7 +70,6 @@ function LocationAutocomplete({
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showList, setShowList] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-
   // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -92,7 +80,6 @@ function LocationAutocomplete({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
-
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setQuery(val);
@@ -108,14 +95,12 @@ function LocationAutocomplete({
       setShowList(false);
     }
   };
-
   const handleSelect = (loc: string) => {
     setQuery(loc);
     onChange(loc);
     setSuggestions([]);
     setShowList(false);
   };
-
   return (
     <div ref={wrapperRef} className="relative">
       <Label htmlFor={id}>{label} {required && "*"}</Label>
@@ -135,7 +120,6 @@ function LocationAutocomplete({
           className="flex h-10 w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         />
       </div>
-
       {showList && (
         <ul className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-52 overflow-y-auto">
           {suggestions.map((loc) => (
@@ -151,27 +135,22 @@ function LocationAutocomplete({
     </div>
   );
 }
-
 // ── Main Page ─────────────────────────────────────────────────────
 export default function RegisterContractor() {
   const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [formData, setFormData] = useState({
     name: "", phone: "", email: "",
     location: "", city: "", workers: "", workType: "",
-    priceRange: "", experience: "", description: "",
+    experience: "", description: "",
   });
-
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
@@ -190,9 +169,7 @@ export default function RegisterContractor() {
       setImagePreview(null);
     }
   };
-
   const handleRemoveImage = () => { setImage(null); setImagePreview(null); };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -213,7 +190,6 @@ export default function RegisterContractor() {
       setLoading(false);
     }
   };
-
   if (submitted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -235,7 +211,6 @@ export default function RegisterContractor() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-primary text-white py-12 px-4">
@@ -244,14 +219,12 @@ export default function RegisterContractor() {
           <p className="text-lg opacity-90">Join our platform and connect with new customers</p>
         </div>
       </div>
-
       <div className="max-w-4xl mx-auto px-4 py-8">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {error}
           </div>
         )}
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left sidebar */}
           <div className="space-y-6">
@@ -280,11 +253,9 @@ export default function RegisterContractor() {
                 <p>• Valid phone number</p>
                 <p>• Min 2 years of experience</p>
                 <p>• Min 5 workers in the team</p>
-                <p>• Clear price range</p>
                 <p>• Optional: Profile photo</p>
               </CardContent>
             </Card>
-
             {/* Gujarat Cities Info */}
             <Card className="border-orange-200 bg-orange-50">
               <CardHeader className="pb-2">
@@ -301,7 +272,6 @@ export default function RegisterContractor() {
               </CardContent>
             </Card>
           </div>
-
           {/* Main form */}
           <div className="lg:col-span-2">
             <Card>
@@ -311,17 +281,14 @@ export default function RegisterContractor() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-
                   {/* Personal Information */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
-
                     <div>
                       <Label htmlFor="name">Full Name *</Label>
                       <Input id="name" name="name" required placeholder="Your full name"
                         value={formData.name} onChange={handleChange} />
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="phone">Phone Number *</Label>
@@ -334,7 +301,6 @@ export default function RegisterContractor() {
                           value={formData.email} onChange={handleChange} />
                       </div>
                     </div>
-
                     {/* ✅ Location + City — Gujarat Autocomplete */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <LocationAutocomplete
@@ -353,11 +319,9 @@ export default function RegisterContractor() {
                       />
                     </div>
                   </div>
-
                   {/* Business Information */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-gray-800 border-b pb-2">Business Information</h3>
-
                     <div>
                       <Label>Type of Work *</Label>
                       <Select name="workType" required onValueChange={(v) => setFormData({ ...formData, workType: v })}>
@@ -367,11 +331,14 @@ export default function RegisterContractor() {
                           <SelectItem value="shifting">Shifting & Moving</SelectItem>
                           <SelectItem value="loading">Loading/Unloading</SelectItem>
                           <SelectItem value="helpers">Daily Helpers</SelectItem>
+                          <SelectItem value="plumber">Plumber</SelectItem>
+                          <SelectItem value="electrician">Electrician</SelectItem>
+                          <SelectItem value="carpenter">Carpenter</SelectItem>
+                          <SelectItem value="interior_designer">Interior Designer</SelectItem>
                           <SelectItem value="multiple">Multiple Services</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="workers">Number of Workers *</Label>
@@ -384,20 +351,12 @@ export default function RegisterContractor() {
                           value={formData.experience} onChange={handleChange} />
                       </div>
                     </div>
-
-                    <div>
-                      <Label htmlFor="priceRange">Price Range (per worker/day) *</Label>
-                      <Input id="priceRange" name="priceRange" required placeholder="500-700"
-                        value={formData.priceRange} onChange={handleChange} />
-                    </div>
-
                     <div>
                       <Label htmlFor="description">Description</Label>
                       <Textarea id="description" name="description"
                         placeholder="Tell us about your team and services..." rows={3}
                         value={formData.description} onChange={handleChange} />
                     </div>
-
                     {/* Image Upload */}
                     <div>
                       <Label htmlFor="image">Profile Photo (Optional)</Label>
@@ -420,7 +379,6 @@ export default function RegisterContractor() {
                       )}
                     </div>
                   </div>
-
                   <Button type="submit" size="lg" className="w-full" disabled={loading}>
                     {loading
                       ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Submitting...</>
