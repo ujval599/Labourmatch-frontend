@@ -9,7 +9,8 @@ import { Textarea } from "../components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import contractorService from "../../services/contractor.service";
-// ── Gujarat ke saare cities + areas ──────────────────────────────
+
+// ── Gujarat Cities + Areas ──────────────────────────────
 const GUJARAT_LOCATIONS = [
   // Major Cities
   "Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar",
@@ -59,7 +60,8 @@ const GUJARAT_LOCATIONS = [
   "Rapar", "Nakhatrana", "Abdasa", "Lakhpat", "Bhachau", "Dudhai",
   "Khavda", "Dayapar", "Vondh", "Samakhyali",
 ];
-// ── City Autocomplete Component ───────────────────────────────────
+
+// ── Location Autocomplete Component ───────────────────────────────────
 function LocationAutocomplete({
   id, name, label, placeholder, value, onChange, required = false,
 }: {
@@ -70,6 +72,7 @@ function LocationAutocomplete({
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showList, setShowList] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -79,6 +82,7 @@ function LocationAutocomplete({
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setQuery(val);
@@ -94,12 +98,14 @@ function LocationAutocomplete({
       setShowList(false);
     }
   };
+
   const handleSelect = (loc: string) => {
     setQuery(loc);
     onChange(loc);
     setSuggestions([]);
     setShowList(false);
   };
+
   return (
     <div ref={wrapperRef} className="relative">
       <Label htmlFor={id}>{label} {required && "*"}</Label>
@@ -134,6 +140,7 @@ function LocationAutocomplete({
     </div>
   );
 }
+
 // ── Main Page ─────────────────────────────────────────────────────
 export default function RegisterContractor() {
   const navigate = useNavigate();
@@ -147,9 +154,11 @@ export default function RegisterContractor() {
   });
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
@@ -159,7 +168,7 @@ export default function RegisterContractor() {
         setImage(null); setImagePreview(null); return;
       }
       if (file.size > 5 * 1024 * 1024) {
-        setError("The image size should be less than 5MB.");
+        setError("Image size should be less than 5MB.");
         setImage(null); setImagePreview(null); return;
       }
       setError("");
@@ -168,7 +177,9 @@ export default function RegisterContractor() {
       setImagePreview(null);
     }
   };
+
   const handleRemoveImage = () => { setImage(null); setImagePreview(null); };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -189,6 +200,7 @@ export default function RegisterContractor() {
       setLoading(false);
     }
   };
+
   if (submitted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -210,22 +222,27 @@ export default function RegisterContractor() {
       </div>
     );
   }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-primary text-white py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Register Your Services</h1>
-          <p className="text-lg opacity-90">Contractors, Electricians, Plumbers, Carpenters, Interior Designers — sab ke liye</p>
+          <p className="text-lg opacity-90">
+            For Contractors, Electricians, Plumbers, Carpenters & Interior Designers
+          </p>
         </div>
       </div>
+
       <div className="max-w-4xl mx-auto px-4 py-8">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
             {error}
           </div>
         )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left sidebar */}
+          {/* Left Sidebar */}
           <div className="space-y-6">
             <Card>
               <CardHeader><CardTitle>Benefits</CardTitle></CardHeader>
@@ -246,16 +263,17 @@ export default function RegisterContractor() {
                 ))}
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader><CardTitle>Requirements</CardTitle></CardHeader>
               <CardContent className="space-y-2 text-sm text-muted-foreground">
                 <p>• Valid phone number</p>
-                <p>• Min 2 years of experience</p>
-                <p>• Min 5 workers in the team</p>
+                <p>• Minimum 2 years of experience</p>
+                <p>• Minimum 5 workers in the team</p>
                 <p>• Optional: Profile photo</p>
               </CardContent>
             </Card>
-            {/* Gujarat Cities Info */}
+
             <Card className="border-orange-200 bg-orange-50">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm text-orange-700 flex items-center gap-2">
@@ -266,12 +284,13 @@ export default function RegisterContractor() {
                 <p>📍 Ahmedabad, Surat, Vadodara</p>
                 <p>📍 Rajkot, Bhavnagar, Jamnagar</p>
                 <p>📍 Gandhinagar, Anand, Mehsana</p>
-                <p>📍 Kutch, Morbi, Bharuch + more</p>
+                <p>📍 Kutch, Morbi, Bharuch & more</p>
                 <p className="text-orange-500 font-medium mt-2">150+ Gujarat locations available</p>
               </CardContent>
             </Card>
           </div>
-          {/* Main form */}
+
+          {/* Main Form */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -280,12 +299,13 @@ export default function RegisterContractor() {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
+
                   {/* Personal Information */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
                     <div>
                       <Label htmlFor="name">Full Name *</Label>
-                      <Input id="name" name="name" required placeholder="Your full name"
+                      <Input id="name" name="name" required placeholder="Enter your full name"
                         value={formData.name} onChange={handleChange} />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -300,35 +320,35 @@ export default function RegisterContractor() {
                           value={formData.email} onChange={handleChange} />
                       </div>
                     </div>
-                    {/* Location + City — Gujarat Autocomplete */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <LocationAutocomplete
                         id="location" name="location" required
-                        label="Location (Area/Mohalla)"
-                        placeholder="Jaise: Bopal, Adajan, Alkapuri..."
+                        label="Area / Locality"
+                        placeholder="e.g. Bopal, Adajan, Alkapuri..."
                         value={formData.location}
                         onChange={(val) => setFormData(f => ({ ...f, location: val }))}
                       />
                       <LocationAutocomplete
                         id="city" name="city" required
                         label="City"
-                        placeholder="Jaise: Ahmedabad, Surat..."
+                        placeholder="e.g. Ahmedabad, Surat..."
                         value={formData.city}
                         onChange={(val) => setFormData(f => ({ ...f, city: val }))}
                       />
                     </div>
                   </div>
+
                   {/* Business Information */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-gray-800 border-b pb-2">Business Information</h3>
                     <div>
                       <Label>Type of Work *</Label>
                       <Select name="workType" required onValueChange={(v) => setFormData({ ...formData, workType: v })}>
-                        <SelectTrigger><SelectValue placeholder="Select work type" /></SelectTrigger>
+                        <SelectTrigger><SelectValue placeholder="Select your work type" /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="construction">Construction</SelectItem>
                           <SelectItem value="shifting">Shifting & Moving</SelectItem>
-                          <SelectItem value="loading">Loading/Unloading</SelectItem>
+                          <SelectItem value="loading">Loading / Unloading</SelectItem>
                           <SelectItem value="helpers">Daily Helpers</SelectItem>
                           <SelectItem value="plumber">Plumber</SelectItem>
                           <SelectItem value="electrician">Electrician</SelectItem>
@@ -341,21 +361,22 @@ export default function RegisterContractor() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="workers">Number of Workers *</Label>
-                        <Input id="workers" name="workers" type="number" required placeholder="15"
+                        <Input id="workers" name="workers" type="number" required placeholder="e.g. 15"
                           value={formData.workers} onChange={handleChange} />
                       </div>
                       <div>
                         <Label htmlFor="experience">Years of Experience *</Label>
-                        <Input id="experience" name="experience" type="number" required placeholder="5"
+                        <Input id="experience" name="experience" type="number" required placeholder="e.g. 5"
                           value={formData.experience} onChange={handleChange} />
                       </div>
                     </div>
                     <div>
                       <Label htmlFor="description">Description</Label>
                       <Textarea id="description" name="description"
-                        placeholder="Tell us about your team and services..." rows={3}
+                        placeholder="Tell us about your team and the services you offer..." rows={3}
                         value={formData.description} onChange={handleChange} />
                     </div>
+
                     {/* Image Upload */}
                     <div>
                       <Label htmlFor="image">Profile Photo (Optional)</Label>
@@ -378,6 +399,7 @@ export default function RegisterContractor() {
                       )}
                     </div>
                   </div>
+
                   <Button type="submit" size="lg" className="w-full" disabled={loading}>
                     {loading
                       ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Submitting...</>
