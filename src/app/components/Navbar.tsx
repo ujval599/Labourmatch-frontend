@@ -24,7 +24,7 @@ export function Navbar() {
   ];
 
   const contractorLinks = [
-    { to: "/register-contractor", label: "Become a Contractor" },
+    { to: "/register-contractor", label: "Register Your Services" },
     { to: "/premium", label: "Premium Plans" },
   ];
 
@@ -76,7 +76,7 @@ export function Navbar() {
                   </div>
                 )}
 
-                {/* ✅ User Badge */}
+                {/* User Badge */}
                 <div
                   onClick={() => isContractor ? navigate("/my-profile") : navigate("/my-bookings")}
                   className="flex items-center gap-2 bg-orange-50 border border-orange-200 px-3 py-2 rounded-xl cursor-pointer hover:bg-orange-100 transition-all group"
@@ -89,7 +89,6 @@ export function Navbar() {
                     <span className="text-sm font-semibold text-gray-700 max-w-[120px] truncate leading-tight">
                       {user.name}
                     </span>
-                    {/* ✅ FIX: Sirf contractor ko dikhao */}
                     {isContractor && (
                       <span className="text-[10px] text-orange-500 font-medium leading-tight group-hover:text-orange-600">
                         See Your Profile →
@@ -154,7 +153,6 @@ export function Navbar() {
                         {isAdmin ? "Admin" : isContractor ? "Contractor" : "User"}
                       </p>
                       <p className="text-sm font-semibold text-gray-700">{user.name}</p>
-                      {/* ✅ FIX: Mobile mein bhi sirf contractor ko dikhao */}
                       {isContractor && (
                         <p className="text-[10px] text-orange-500 font-medium">
                           See Your Profile →
