@@ -70,7 +70,6 @@ function LocationAutocomplete({
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showList, setShowList] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -204,7 +203,7 @@ export default function RegisterContractor() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button onClick={() => navigate("/")}>Go to Home</Button>
-              <Button variant="outline" onClick={() => navigate("/contractors")}>View Contractors</Button>
+              <Button variant="outline" onClick={() => navigate("/contractors")}>View Professionals</Button>
             </div>
           </CardContent>
         </Card>
@@ -215,8 +214,8 @@ export default function RegisterContractor() {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-primary text-white py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Register as a Contractor</h1>
-          <p className="text-lg opacity-90">Join our platform and connect with new customers</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Register Your Services</h1>
+          <p className="text-lg opacity-90">Contractors, Electricians, Plumbers, Carpenters, Interior Designers — sab ke liye</p>
         </div>
       </div>
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -277,7 +276,7 @@ export default function RegisterContractor() {
             <Card>
               <CardHeader>
                 <CardTitle>Registration Form</CardTitle>
-                <CardDescription>Fill in your details to register</CardDescription>
+                <CardDescription>Fill in your details to list your services</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -301,7 +300,7 @@ export default function RegisterContractor() {
                           value={formData.email} onChange={handleChange} />
                       </div>
                     </div>
-                    {/* ✅ Location + City — Gujarat Autocomplete */}
+                    {/* Location + City — Gujarat Autocomplete */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <LocationAutocomplete
                         id="location" name="location" required
