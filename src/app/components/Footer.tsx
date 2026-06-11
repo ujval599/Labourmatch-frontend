@@ -53,7 +53,7 @@ export function Footer() {
               {showBecomeContractor && (
                 <li>
                   <Link to="/register-contractor" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                    Become a Contractor
+                   Register Your Services
                   </Link>
                 </li>
               )}
