@@ -66,7 +66,7 @@ function LoginRequiredModal({ onClose, onLogin, countdown }: {
 
         {/* Text */}
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
-          Join LabourMatch! 🚀
+          Join LabourMatch! 
         </h2>
         <p className="text-center text-gray-500 mb-2 text-sm leading-relaxed">
           You’ve seen our platform — now log in to get full access!
@@ -82,7 +82,7 @@ function LoginRequiredModal({ onClose, onLogin, countdown }: {
             className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-all shadow-md hover:shadow-lg hover:opacity-90 active:scale-95"
             style={{ background: "linear-gradient(135deg, #16a34a, #0d9488)" }}
           >
-            🔐 Login / Sign Up 
+             Login / Sign Up 
           </button>
         </div>
 
