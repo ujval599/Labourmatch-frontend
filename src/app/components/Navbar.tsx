@@ -1,6 +1,6 @@
 // src/app/components/Navbar.tsx
 import { Link, useNavigate } from "react-router";
-import { Menu, X, LogOut, User, HardHat, Users, LayoutDashboard } from "lucide-react";
+import { Menu, X, LogOut, User, HardHat, Users } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useAuth } from "../../context/AuthContext";
@@ -18,7 +18,7 @@ export function Navbar() {
 
   const commonLinks = [
     { to: "/", label: "Home" },
-    { to: "/contractors", label: "Find Contractors" },
+    { to: "/contractors", label: "Find Services" },
     { to: "/about", label: "About Us" },
     { to: "/contact", label: "Contact" },
   ];
@@ -129,7 +129,6 @@ export function Navbar() {
               </Link>
             ))}
 
-            {/* Mobile — Contractor Profile link */}
             {isContractor && (
               <Link to="/my-profile"
                 className="block py-3 text-amber-600 hover:text-amber-700 transition-colors font-medium"
