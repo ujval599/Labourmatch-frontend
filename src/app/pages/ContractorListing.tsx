@@ -91,8 +91,8 @@ export default function ContractorListing() {
       {/* Header */}
       <div className="bg-primary text-white py-10 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Find Contractors</h1>
-          <p className="opacity-90">Verified contractors in your area</p>
+          <h1 className="text-3xl font-bold mb-2">Find Services</h1>
+          <p className="opacity-90">All Services — One Platform</p>
         </div>
       </div>
 
