@@ -197,7 +197,7 @@ export default function Auth() {
                             : "border-gray-200 text-gray-600 hover:border-amber-500 hover:bg-amber-50 hover:text-amber-600"
                         }`}>
                         <HardHat className="h-4 w-4" />
-                        Contractor
+                        Register Your Services
                         {selectedRole === "contractor" && <CheckCircle2 className="h-4 w-4 absolute top-1 right-1 text-white" />}
                       </button>
                     </div>
@@ -206,7 +206,7 @@ export default function Auth() {
                     {selectedRole === "contractor" && (
                       <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
                         <p className="text-xs text-amber-700 font-medium">
-                          Register to become a contractor. Use the same phone number that you used to log in.
+                          Register to Register Your Services. Use the same phone number that you used to log in.
                         </p>
                       </div>
                     )}
