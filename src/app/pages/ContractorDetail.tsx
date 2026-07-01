@@ -778,18 +778,6 @@ export default function ContractorDetail() {
                 ))}
               </div>
 
-              {tab === "overview" && (
-                <div className="space-y-4">
-                  {(contractor.priceMin || contractor.priceMax) && (
-                    <div className="bg-white rounded-2xl border border-gray-100 p-5">
-                      <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm"><span className="text-orange-500 text-base">₹</span> Price Range</h3>
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 bg-orange-50 rounded-xl p-4 text-center"><p className="text-xs text-gray-400 mb-1">Minimum</p><p className="text-2xl font-extrabold text-orange-600">₹{contractor.priceMin?.toLocaleString()}</p></div>
-                        <span className="text-gray-300 font-bold text-xl">—</span>
-                        <div className="flex-1 bg-amber-50 rounded-xl p-4 text-center"><p className="text-xs text-gray-400 mb-1">Maximum</p><p className="text-2xl font-extrabold text-amber-600">₹{contractor.priceMax?.toLocaleString()}</p></div>
-                      </div>
-                    </div>
-                  )}
                   {contractor.description && (
                     <div className="bg-white rounded-2xl border border-gray-100 p-5">
                       <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm"><Users className="h-4 w-4 text-orange-500" /> About</h3>
