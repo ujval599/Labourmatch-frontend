@@ -561,7 +561,16 @@ export default function ContractorProfile() {
               )}
             </div>
 
-            
+            <div className="bg-white rounded-2xl border border-gray-100 p-5">
+              <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2"><Award className="h-4 w-4 text-orange-400" /> Price Range</h3>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 bg-orange-50 rounded-xl p-4 text-center"><p className="text-xs text-gray-400 mb-1">Minimum</p><p className="text-2xl font-extrabold text-orange-600">₹{profile.priceMin}</p></div>
+                <span className="text-gray-300 font-bold text-xl">—</span>
+                <div className="flex-1 bg-amber-50 rounded-xl p-4 text-center"><p className="text-xs text-gray-400 mb-1">Maximum</p><p className="text-2xl font-extrabold text-amber-600">₹{profile.priceMax}</p></div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ── Media ── */}
         {activeTab === "media" && (
