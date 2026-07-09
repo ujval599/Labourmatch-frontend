@@ -11,12 +11,14 @@ import {
 
 const BASE_URL = (import.meta.env.VITE_API_URL || "https://labourmatch.onrender.com/api").replace(/\/api$/, "");
 
-function getToken() { return localStorage.getItem("token"); }
-function getCurrentUser() {
+function getToken(): string | null { return localStorage.getItem("token"); }
+function getCurrentUser(): { id: string; name: string; phone?: string } | null {
   try { const raw = localStorage.getItem("user"); return raw ? JSON.parse(raw) : null; }
   catch { return null; }
 }
-function isContractorRole() { return localStorage.getItem("selectedRole") === "contractor"; }
+function isContractorRole(): boolean {
+  return localStorage.getItem("selectedRole") === "contractor";
+}
 
 type ChatMessage = { id: string; text: string; senderRole: "user" | "contractor"; createdAt: string; isRead: boolean; };
 
@@ -50,29 +52,47 @@ function StarRating({ value, onChange, size = "md" }: { value: number; onChange?
   );
 }
 
-function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; onClose: () => void; onOpenChat: () => void; }) {
+function BookNowModal({ contractor, onClose, onOpenChat }: {
+  contractor: any; onClose: () => void; onOpenChat: () => void;
+}) {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
   const token = getToken();
+
   const [view, setView] = useState<"contact" | "form" | "success">("contact");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
   const [form, setForm] = useState({
-    name: currentUser?.name || "", phone: currentUser?.phone || "",
-    workType: contractor.category || "", workersNeeded: "1",
-    startDate: "", endDate: "", location: contractor.city || "", message: "",
+    name: currentUser?.name || "",
+    phone: currentUser?.phone || "",
+    workType: contractor.category || "",
+    workersNeeded: "1",
+    startDate: "",
+    endDate: "",
+    location: contractor.city || "",
+    message: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) { navigate("/auth"); return; }
     if (!form.startDate) { setError("Please select a start date."); return; }
+
     setSubmitting(true); setError("");
     try {
       const res = await fetch(`${BASE_URL}/api/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ contractorId: contractor.id, workersNeeded: parseInt(form.workersNeeded), startDate: form.startDate, endDate: form.endDate || undefined, message: form.message || undefined, workType: form.workType || undefined, location: form.location || undefined }),
+        body: JSON.stringify({
+          contractorId: contractor.id,
+          workersNeeded: parseInt(form.workersNeeded),
+          startDate: form.startDate,
+          endDate: form.endDate || undefined,
+          message: form.message || undefined,
+          workType: form.workType || undefined,
+          location: form.location || undefined,
+        }),
       });
       const data = await res.json();
       if (data.success) setView("success");
@@ -82,18 +102,25 @@ function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; on
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4" onClick={e => e.target === e.currentTarget && onClose()}>
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4"
+      onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-        {/* ✅ Primary color header */}
-        <div className="bg-gradient-to-r from-primary to-secondary px-5 py-4 flex items-center justify-between flex-shrink-0">
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-4 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl overflow-hidden border-2 border-white/30 bg-white/20 flex-shrink-0">
-              {contractor.imageUrl ? <img src={contractor.imageUrl} alt={contractor.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white font-bold text-lg">{contractor.name?.charAt(0)?.toUpperCase()}</div>}
+              {contractor.imageUrl
+                ? <img src={contractor.imageUrl} alt={contractor.name} className="w-full h-full object-cover" />
+                : <div className="w-full h-full flex items-center justify-center text-white font-bold text-lg">{contractor.name?.charAt(0)?.toUpperCase()}</div>}
             </div>
-            <div><h3 className="text-white font-bold text-sm">{contractor.name}</h3><p className="text-white/70 text-xs">{contractor.category} • {contractor.city}</p></div>
+            <div>
+              <h3 className="text-white font-bold text-sm">{contractor.name}</h3>
+              <p className="text-white/70 text-xs">{contractor.category} • {contractor.city}</p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
-            {view === "form" && <button onClick={() => setView("contact")} className="text-white/70 hover:text-white text-xs px-2 py-1 rounded-lg hover:bg-white/20 transition-colors">← Back</button>}
+            {view === "form" && (
+              <button onClick={() => setView("contact")} className="text-white/70 hover:text-white text-xs px-2 py-1 rounded-lg hover:bg-white/20 transition-colors">← Back</button>
+            )}
             <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><X className="h-4 w-4" /></button>
           </div>
         </div>
@@ -101,22 +128,22 @@ function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; on
         {view === "contact" && (
           <div className="p-5 space-y-3 overflow-y-auto">
             <div className="text-center mb-2">
-              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-2"><CalendarCheck className="h-6 w-6 text-primary" /></div>
+              <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-2"><CalendarCheck className="h-6 w-6 text-orange-500" /></div>
               <h4 className="font-bold text-gray-800">Contact & Book</h4>
               <p className="text-gray-400 text-xs mt-0.5">Choose how to reach {contractor.name}</p>
             </div>
             <button onClick={() => { if (!token) { onClose(); navigate("/auth"); return; } setView("form"); }}
-              className="flex items-center gap-4 w-full bg-primary/5 border-2 border-primary hover:bg-primary/10 text-primary py-3.5 px-4 rounded-2xl font-semibold transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><FileText className="h-5 w-5 text-white" /></div>
+              className="flex items-center gap-4 w-full bg-orange-50 border-2 border-orange-400 hover:bg-orange-100 text-orange-700 py-3.5 px-4 rounded-2xl font-semibold transition-all group">
+              <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><FileText className="h-5 w-5 text-white" /></div>
               <div className="flex-1 text-left">
-                <p className="text-xs text-primary font-medium">Recommended</p>
+                <p className="text-xs text-orange-500 font-medium">Recommended</p>
                 <p className="font-bold text-gray-800 text-sm">Send Booking Request</p>
                 <p className="text-xs text-gray-400">Fill form — admin & contractor get notified</p>
               </div>
             </button>
             <button onClick={() => { onClose(); onOpenChat(); }}
               className="flex items-center gap-4 w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-400 hover:bg-gray-100 py-3.5 px-4 rounded-2xl font-semibold transition-all group">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><MessageCircle className="h-5 w-5 text-white" /></div>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><MessageCircle className="h-5 w-5 text-white" /></div>
               <div className="flex-1 text-left"><p className="text-xs text-gray-400 font-medium">Chat</p><p className="font-bold text-gray-800 text-sm">Message Contractor</p></div>
               <span className="text-gray-400 text-xs">💬</span>
             </button>
@@ -127,25 +154,49 @@ function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; on
         {view === "form" && (
           <form onSubmit={handleSubmit} className="overflow-y-auto flex-1">
             <div className="p-5 space-y-4">
-              <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-center">
-                <p className="text-xs text-primary font-medium">📋 Fill this form — Admin & {contractor.name} will be notified immediately</p>
+              <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 text-center">
+                <p className="text-xs text-orange-700 font-medium">📋 Fill this form — Admin & {contractor.name} will be notified immediately</p>
               </div>
-              <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Your Name <span className="text-red-500">*</span></label><input required type="text" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Your full name" className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
-              <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Your Phone <span className="text-red-500">*</span></label><input required type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="10 digit phone number" maxLength={10} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
-              <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Work Type</label><input type="text" value={form.workType} onChange={e => setForm(f => ({ ...f, workType: e.target.value }))} placeholder="e.g. Construction, Shifting" className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
+              <div>
+                <label className="text-xs font-semibold text-gray-600 block mb-1.5">Your Name <span className="text-red-500">*</span></label>
+                <input required type="text" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Your full name" className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-gray-600 block mb-1.5">Your Phone <span className="text-red-500">*</span></label>
+                <input required type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="10 digit phone number" maxLength={10} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-gray-600 block mb-1.5">Work Type</label>
+                <input type="text" value={form.workType} onChange={e => setForm(f => ({ ...f, workType: e.target.value }))} placeholder="e.g. Construction, Shifting" className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+              </div>
               <div className="grid grid-cols-2 gap-3">
-                <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Workers Needed <span className="text-red-500">*</span></label><input required type="number" min="1" max="500" value={form.workersNeeded} onChange={e => setForm(f => ({ ...f, workersNeeded: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
-                <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Start Date <span className="text-red-500">*</span></label><input required type="date" value={form.startDate} min={new Date().toISOString().split("T")[0]} onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1.5">Workers Needed <span className="text-red-500">*</span></label>
+                  <input required type="number" min="1" max="500" value={form.workersNeeded} onChange={e => setForm(f => ({ ...f, workersNeeded: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1.5">Start Date <span className="text-red-500">*</span></label>
+                  <input required type="date" value={form.startDate} min={new Date().toISOString().split("T")[0]} onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">End Date</label><input type="date" value={form.endDate} min={form.startDate || new Date().toISOString().split("T")[0]} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
-                <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Location</label><input type="text" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} placeholder="Work location" className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-primary" /></div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1.5">End Date</label>
+                  <input type="date" value={form.endDate} min={form.startDate || new Date().toISOString().split("T")[0]} onChange={e => setForm(f => ({ ...f, endDate: e.target.value }))} className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-600 block mb-1.5">Location</label>
+                  <input type="text" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} placeholder="Work location" className="w-full border border-gray-200 rounded-xl px-4 h-11 text-sm focus:outline-none focus:border-orange-400" />
+                </div>
               </div>
-              <div><label className="text-xs font-semibold text-gray-600 block mb-1.5">Additional Requirements</label><textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="Any specific requirements..." rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none" /></div>
+              <div>
+                <label className="text-xs font-semibold text-gray-600 block mb-1.5">Additional Requirements</label>
+                <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} placeholder="Any specific requirements..." rows={3} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
+              </div>
               {error && <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm"><AlertCircle className="h-4 w-4 flex-shrink-0" />{error}</div>}
             </div>
             <div className="px-5 pb-5 flex-shrink-0">
-              <button type="submit" disabled={submitting} className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3.5 rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 shadow-md">
+              <button type="submit" disabled={submitting} className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3.5 rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 shadow-md">
                 {submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Sending...</> : <><CalendarCheck className="h-4 w-4" /> Send Booking Request</>}
               </button>
               <p className="text-xs text-gray-400 text-center mt-2">Admin & contractor will be notified via email</p>
@@ -160,11 +211,11 @@ function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; on
               <h3 className="text-xl font-bold text-gray-800">Booking Request Sent! 🎉</h3>
               <p className="text-gray-400 text-xs mt-1">Your request has been submitted successfully</p>
             </div>
-            <div className="bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary/20 rounded-2xl p-4 mb-4">
-              <p className="text-xs font-bold text-primary mb-3 flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" /> Contractor Contact Details</p>
+            <div className="bg-gradient-to-br from-orange-50 to-amber-50 border-2 border-orange-200 rounded-2xl p-4 mb-4">
+              <p className="text-xs font-bold text-orange-600 mb-3 flex items-center gap-1.5"><Phone className="h-3.5 w-3.5" /> Contractor Contact Details</p>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-primary/20 flex-shrink-0">
-                  {contractor.imageUrl ? <img src={contractor.imageUrl} alt={contractor.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-primary font-bold text-lg">{contractor.name?.charAt(0)}</div>}
+                <div className="w-12 h-12 rounded-xl overflow-hidden bg-orange-200 flex-shrink-0">
+                  {contractor.imageUrl ? <img src={contractor.imageUrl} alt={contractor.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-orange-600 font-bold text-lg">{contractor.name?.charAt(0)}</div>}
                 </div>
                 <div><p className="font-bold text-gray-800">{contractor.name}</p><p className="text-xs text-gray-500">{contractor.category} • {contractor.city}</p></div>
               </div>
@@ -187,7 +238,7 @@ function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; on
               <div className="flex items-center gap-2 text-xs text-green-600"><CheckCircle2 className="h-3.5 w-3.5" /> Contractor notified via email</div>
               <div className="flex items-center gap-2 text-xs text-green-600"><CheckCircle2 className="h-3.5 w-3.5" /> Booking saved in dashboard</div>
             </div>
-            <button onClick={onClose} className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90">Done</button>
+            <button onClick={onClose} className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90">Done</button>
           </div>
         )}
       </div>
@@ -195,7 +246,9 @@ function BookNowModal({ contractor, onClose, onOpenChat }: { contractor: any; on
   );
 }
 
-function ReviewModal({ contractorId, contractorName, onClose, onSuccess }: { contractorId: string; contractorName: string; onClose: () => void; onSuccess: () => void; }) {
+function ReviewModal({ contractorId, contractorName, onClose, onSuccess }: {
+  contractorId: string; contractorName: string; onClose: () => void; onSuccess: () => void;
+}) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -223,17 +276,17 @@ function ReviewModal({ contractorId, contractorName, onClose, onSuccess }: { con
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-        <div className="bg-gradient-to-r from-primary to-secondary px-5 py-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-4 flex items-center justify-between">
           <div><h3 className="text-white font-bold text-base">Rate & Review</h3><p className="text-white/70 text-xs">{contractorName}</p></div>
           <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><X className="h-4 w-4" /></button>
         </div>
         <div className="p-6">
           {notLoggedIn ? (
             <div className="text-center py-4">
-              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3"><Lock className="h-7 w-7 text-primary" /></div>
+              <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3"><Lock className="h-7 w-7 text-orange-500" /></div>
               <h4 className="font-bold text-gray-800 mb-2">Login Required</h4>
               <p className="text-gray-500 text-sm mb-4">Login to submit a review.</p>
-              <button onClick={() => { onClose(); navigate("/auth"); }} className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-semibold text-sm">Login to Continue</button>
+              <button onClick={() => { onClose(); navigate("/auth"); }} className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold text-sm">Login to Continue</button>
             </div>
           ) : (
             <div className="space-y-5">
@@ -244,12 +297,12 @@ function ReviewModal({ contractorId, contractorName, onClose, onSuccess }: { con
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-2">Your Review <span className="text-gray-400 font-normal">(Optional)</span></label>
-                <textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Share your experience..." rows={4} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary resize-none" />
+                <textarea value={comment} onChange={e => setComment(e.target.value)} placeholder="Share your experience..." rows={4} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 resize-none" />
               </div>
               {error && <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm"><AlertCircle className="h-4 w-4 flex-shrink-0" />{error}</div>}
               <div className="flex gap-3">
                 <button onClick={onClose} className="flex-1 border border-gray-200 text-gray-600 py-3 rounded-xl font-semibold text-sm hover:bg-gray-50">Cancel</button>
-                <button onClick={handleSubmit} disabled={submitting || rating === 0} className="flex-1 bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2">
+                <button onClick={handleSubmit} disabled={submitting || rating === 0} className="flex-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2">
                   {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Star className="h-4 w-4 fill-white" />} Submit Review
                 </button>
               </div>
@@ -261,7 +314,9 @@ function ReviewModal({ contractorId, contractorName, onClose, onSuccess }: { con
   );
 }
 
+// ─── Chat Board — FIXED ───────────────────────────────────────────
 function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => void }) {
+  // ✅ FIX: Always initialize as empty array
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(true);
@@ -278,10 +333,16 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
   const fetchMessages = useCallback(async (silent = false) => {
     if (!token) { setNotLoggedIn(true); setLoading(false); return; }
     try {
-      const res = await fetch(`${BASE_URL}/api/chat/${contractor.id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${BASE_URL}/api/chat/${contractor.id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (res.status === 401) { setNotLoggedIn(true); setLoading(false); return; }
       const data = await res.json();
-      if (data.success) { setMessages(Array.isArray(data.data) ? data.data : []); setError(""); }
+      if (data.success) {
+        // ✅ FIX: Array check — null/undefined se crash nahi hoga
+        setMessages(Array.isArray(data.data) ? data.data : []);
+        setError("");
+      }
     } catch { if (!silent) setError("Could not connect to server."); }
     finally { if (!silent) setLoading(false); }
   }, [contractor.id, token]);
@@ -306,20 +367,27 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
         body: JSON.stringify({ text }),
       });
       const data = await res.json();
-      if (data.success) { setMessages(prev => [...(Array.isArray(prev) ? prev : []), data.data]); await fetchMessages(true); }
-      else { setError(data.message || "Failed to send."); setInputText(text); }
+      if (data.success) {
+        // ✅ FIX: Safe spread
+        setMessages(prev => [...(Array.isArray(prev) ? prev : []), data.data]);
+        await fetchMessages(true);
+      } else { setError(data.message || "Failed to send."); setInputText(text); }
     } catch { setError("Connection failed."); setInputText(text); }
     finally { setSending(false); }
   };
 
   const clearChat = async () => {
     if (!confirm("Clear entire chat history?")) return;
-    try { await fetch(`${BASE_URL}/api/chat/${contractor.id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }); setMessages([]); }
-    catch { setError("Could not clear chat."); }
+    try {
+      await fetch(`${BASE_URL}/api/chat/${contractor.id}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      setMessages([]);
+    } catch { setError("Could not clear chat."); }
   };
 
   const formatTime = (iso: string) => new Date(iso).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
   const formatDate = (iso: string) => new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+
+  // ✅ FIX: Safe reduce — array check pehle
   const safeMessages = Array.isArray(messages) ? messages : [];
   const groupedMessages = safeMessages.reduce<{ date: string; msgs: ChatMessage[] }[]>((acc, msg) => {
     const date = formatDate(msg.createdAt);
@@ -333,15 +401,15 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
     return (
       <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center sm:px-4" onClick={e => e.target === e.currentTarget && onClose()}>
         <div className="bg-white w-full sm:max-w-md sm:rounded-2xl overflow-hidden shadow-2xl">
-          <div className="bg-gradient-to-r from-primary to-secondary px-4 py-3 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 flex items-center justify-between">
             <p className="text-white font-bold text-sm">Message {contractor.name}</p>
             <button onClick={onClose} className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white"><X className="h-4 w-4" /></button>
           </div>
           <div className="p-8 text-center">
-            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"><Lock className="h-8 w-8 text-primary" /></div>
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4"><Lock className="h-8 w-8 text-orange-500" /></div>
             <h3 className="font-bold text-gray-800 text-lg mb-2">Login Required</h3>
             <p className="text-gray-500 text-sm mb-6">Login to message contractors.</p>
-            <button onClick={() => { onClose(); navigate("/auth"); }} className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90">Login to Continue</button>
+            <button onClick={() => { onClose(); navigate("/auth"); }} className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90">Login to Continue</button>
             <button onClick={onClose} className="w-full mt-2 text-gray-400 text-sm py-2 hover:text-gray-600">Cancel</button>
           </div>
         </div>
@@ -352,7 +420,7 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center sm:px-4" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="bg-white w-full sm:max-w-md sm:rounded-2xl flex flex-col overflow-hidden shadow-2xl" style={{ height: "min(620px, 92vh)" }}>
-        <div className="bg-gradient-to-r from-primary to-secondary px-4 py-3 flex items-center gap-3 flex-shrink-0">
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 flex items-center gap-3 flex-shrink-0">
           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/40 bg-white/20 flex-shrink-0">
             {contractor?.imageUrl ? <img src={contractor.imageUrl} alt={contractor.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white font-bold text-lg">{contractor?.name?.charAt(0)?.toUpperCase()}</div>}
           </div>
@@ -377,12 +445,12 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
         <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50">
           {loading ? (
             <div className="flex flex-col items-center justify-center h-full gap-3">
-              <div className="w-8 h-8 rounded-full border-primary/20 border-t-primary animate-spin" style={{ borderWidth: 3, borderStyle: "solid" }} />
+              <div className="w-8 h-8 rounded-full border-orange-200 border-t-orange-500 animate-spin" style={{ borderWidth: 3, borderStyle: "solid" }} />
               <p className="text-gray-400 text-sm">Loading messages...</p>
             </div>
           ) : safeMessages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center"><MessageCircle className="h-7 w-7 text-primary/60" /></div>
+              <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center"><MessageCircle className="h-7 w-7 text-orange-400" /></div>
               <div><p className="font-semibold text-gray-700 text-sm">Start a conversation</p><p className="text-gray-400 text-xs mt-1">Send a message to {contractor.name}</p></div>
             </div>
           ) : (
@@ -398,9 +466,9 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
                     const isMe = msg.senderRole === "user";
                     return (
                       <div key={msg.id} className={`flex mb-2 ${isMe ? "justify-end" : "justify-start"}`}>
-                        {!isMe && <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-xs mr-2 flex-shrink-0 mt-auto mb-4">{contractor?.name?.charAt(0)?.toUpperCase()}</div>}
+                        {!isMe && <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-xs mr-2 flex-shrink-0 mt-auto mb-4">{contractor?.name?.charAt(0)?.toUpperCase()}</div>}
                         <div className={`max-w-[72%] flex flex-col ${isMe ? "items-end" : "items-start"}`}>
-                          <div className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${isMe ? "bg-gradient-to-br from-primary to-secondary text-white rounded-br-sm" : "bg-white text-gray-700 border border-gray-100 shadow-sm rounded-bl-sm"}`}>{msg.text}</div>
+                          <div className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed break-words ${isMe ? "bg-gradient-to-br from-orange-500 to-amber-500 text-white rounded-br-sm" : "bg-white text-gray-700 border border-gray-100 shadow-sm rounded-bl-sm"}`}>{msg.text}</div>
                           <span className="text-[10px] text-gray-400 mt-1 px-1 flex items-center gap-1">
                             {formatTime(msg.createdAt)}
                             {isMe && <span className={msg.isRead ? "text-blue-400" : "text-gray-300"}>{msg.isRead ? "✓✓" : "✓"}</span>}
@@ -415,10 +483,10 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
           )}
           {sending && (
             <div className="flex justify-end mt-2">
-              <div className="bg-primary/10 rounded-2xl rounded-br-sm px-3.5 py-2.5 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              <div className="bg-orange-100 rounded-2xl rounded-br-sm px-3.5 py-2.5 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
             </div>
           )}
@@ -436,7 +504,7 @@ function ChatBoard({ contractor, onClose }: { contractor: any; onClose: () => vo
               className="flex-1 bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none" disabled={sending} />
           </div>
           <button onClick={sendMessage} disabled={!inputText.trim() || sending}
-            className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-white hover:opacity-90 disabled:opacity-40 flex-shrink-0 shadow-md">
+            className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center text-white hover:opacity-90 disabled:opacity-40 flex-shrink-0 shadow-md">
             <Send className="h-4 w-4" />
           </button>
         </div>
@@ -470,7 +538,7 @@ function Lightbox({ media, startIndex, onClose }: { media: any[]; startIndex: nu
       </div>
       <div className="flex gap-2 px-4 py-4 overflow-x-auto justify-center flex-shrink-0">
         {media.map((m, i) => (
-          <button key={m.id || i} onClick={() => setIdx(i)} className={`relative flex-shrink-0 w-14 h-11 rounded-lg overflow-hidden transition-all ${i === idx ? "ring-2 ring-primary opacity-100" : "opacity-40 hover:opacity-70"}`}>
+          <button key={m.id || i} onClick={() => setIdx(i)} className={`relative flex-shrink-0 w-14 h-11 rounded-lg overflow-hidden transition-all ${i === idx ? "ring-2 ring-orange-500 opacity-100" : "opacity-40 hover:opacity-70"}`}>
             {m.type === "video" ? <div className="w-full h-full bg-gray-800 flex items-center justify-center"><Play className="h-3 w-3 text-white fill-white" /></div> : <img src={m.thumbnail || m.url} alt="" className="w-full h-full object-cover" />}
           </button>
         ))}
@@ -486,7 +554,7 @@ function ReviewCard({ review }: { review: any }) {
     <div className="bg-white rounded-2xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/60 to-secondary/60 flex items-center justify-center text-white font-bold text-sm">{name?.charAt(0)?.toUpperCase()}</div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-300 to-amber-400 flex items-center justify-center text-white font-bold text-sm">{name?.charAt(0)?.toUpperCase()}</div>
           <div><p className="font-semibold text-gray-800 text-sm">{name}</p><p className="text-xs text-gray-400">{date}</p></div>
         </div>
         <StarRating value={review.rating || 0} size="sm" />
@@ -537,8 +605,8 @@ function UploadModal({ contractorId, onClose, onSuccess }: { contractorId: strin
         </div>
         {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">{error}</div>}
         {!preview ? (
-          <div onClick={() => fileRef.current?.click()} className="border-2 border-dashed border-primary/20 rounded-2xl p-8 text-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all mb-4">
-            <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-3"><Upload className="h-7 w-7 text-primary" /></div>
+          <div onClick={() => fileRef.current?.click()} className="border-2 border-dashed border-orange-200 rounded-2xl p-8 text-center cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all mb-4">
+            <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-3"><Upload className="h-7 w-7 text-orange-500" /></div>
             <p className="font-semibold text-gray-700 mb-1">Select a photo or video</p>
             <p className="text-xs text-gray-400">JPG, PNG, MP4 • Max 20MB</p>
             <input ref={fileRef} type="file" accept="image/*,video/*" onChange={handleFile} className="hidden" />
@@ -550,10 +618,10 @@ function UploadModal({ contractorId, onClose, onSuccess }: { contractorId: strin
           </div>
         )}
         <div className="space-y-3 mb-5">
-          <input type="text" placeholder="Project name (optional)" value={projectName} onChange={e => setProjectName(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary" />
-          <input type="text" placeholder="Caption (optional)" value={caption} onChange={e => setCaption(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary" />
+          <input type="text" placeholder="Project name (optional)" value={projectName} onChange={e => setProjectName(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
+          <input type="text" placeholder="Caption (optional)" value={caption} onChange={e => setCaption(e.target.value)} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400" />
         </div>
-        <button onClick={handleUpload} disabled={uploading || !file} className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2">
+        <button onClick={handleUpload} disabled={uploading || !file} className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-semibold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2">
           {uploading ? <><Loader2 className="h-4 w-4 animate-spin" /> Uploading...</> : <><Upload className="h-4 w-4" /> Upload</>}
         </button>
       </div>
@@ -578,9 +646,18 @@ export default function ContractorDetail() {
   const [showBookNow, setShowBookNow] = useState(false);
   const isContractor = isContractorRole();
 
-  const fetchContractor = () => { fetch(`${BASE_URL}/api/contractors/${id}`).then(r => r.json()).then(d => { setContractor(d.data); setLoading(false); }).catch(() => setLoading(false)); };
-  const fetchWorkMedia = () => { fetch(`${BASE_URL}/api/work-media/${id}`).then(r => r.json()).then(d => { if (d.success) setWorkMedia(Array.isArray(d.data) ? d.data : []); }).catch(() => {}); };
-  const fetchReviews = () => { fetch(`${BASE_URL}/api/reviews/${id}`).then(r => r.json()).then(d => { if (d.success) setReviews(Array.isArray(d.data) ? d.data : []); }).catch(() => {}); };
+  const fetchContractor = () => {
+    fetch(`${BASE_URL}/api/contractors/${id}`)
+      .then(r => r.json()).then(d => { setContractor(d.data); setLoading(false); }).catch(() => setLoading(false));
+  };
+  const fetchWorkMedia = () => {
+    fetch(`${BASE_URL}/api/work-media/${id}`)
+      .then(r => r.json()).then(d => { if (d.success) setWorkMedia(Array.isArray(d.data) ? d.data : []); }).catch(() => {});
+  };
+  const fetchReviews = () => {
+    fetch(`${BASE_URL}/api/reviews/${id}`)
+      .then(r => r.json()).then(d => { if (d.success) setReviews(Array.isArray(d.data) ? d.data : []); }).catch(() => {});
+  };
   const deleteMedia = async (mediaId: string) => {
     if (!confirm("Delete this media?")) return;
     try { await fetch(`${BASE_URL}/api/work-media/${mediaId}`, { method: "DELETE" }); fetchWorkMedia(); } catch {}
@@ -589,17 +666,17 @@ export default function ContractorDetail() {
   useEffect(() => { fetchContractor(); fetchWorkMedia(); fetchReviews(); }, [id]);
 
   if (loading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-primary/5">
-      <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-      <p className="text-sm text-gray-400 font-medium">Loading details...</p>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-orange-50">
+      <div className="w-12 h-12 rounded-full border-4 border-orange-200 border-t-orange-500 animate-spin" />
+      <p className="text-sm text-gray-400 font-medium">Loading contractor details...</p>
     </div>
   );
 
   if (!contractor) return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-primary/5">
-      <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center"><Briefcase className="h-8 w-8 text-primary/40" /></div>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-orange-50">
+      <div className="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center"><Briefcase className="h-8 w-8 text-orange-300" /></div>
       <p className="text-gray-500 font-medium">Contractor not found</p>
-      <button onClick={() => navigate("/contractors")} className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-primary/20 text-primary font-semibold text-sm hover:bg-primary/5">
+      <button onClick={() => navigate("/contractors")} className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-orange-200 text-orange-600 font-semibold text-sm hover:bg-orange-50">
         <ArrowLeft className="h-4 w-4" /> Go Back
       </button>
     </div>
@@ -619,10 +696,9 @@ export default function ContractorDetail() {
       {showBookNow && <BookNowModal contractor={contractor} onClose={() => setShowBookNow(false)} onOpenChat={() => setShowChat(true)} />}
 
       <div className="min-h-screen bg-gray-50">
-        {/* ✅ Primary teal-green header */}
-        <div className="relative bg-gradient-to-br from-primary via-primary/95 to-secondary overflow-hidden">
+        <div className="relative bg-gradient-to-br from-orange-500 via-orange-600 to-amber-500 overflow-hidden">
           <div className="absolute -top-14 -right-14 w-56 h-56 rounded-full bg-white/[0.08] pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-white/[0.05] pointer-events-none" />
+          <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-amber-400/15 pointer-events-none" />
           <div className="relative max-w-4xl mx-auto px-4 pt-4 flex items-center justify-between">
             <button onClick={() => navigate("/contractors")} className="flex items-center gap-2 bg-white/15 hover:bg-white/25 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
               <ArrowLeft className="h-4 w-4" /> Go Back
@@ -663,21 +739,20 @@ export default function ContractorDetail() {
               </div>
             </div>
             <div className="mt-6">
-              <button onClick={() => setShowBookNow(true)} className="flex items-center gap-2 bg-white text-primary hover:bg-white/90 font-bold px-8 py-3.5 rounded-2xl text-base shadow-xl hover:shadow-2xl transition-all hover:scale-105">
+              <button onClick={() => setShowBookNow(true)} className="flex items-center gap-2 bg-white text-orange-600 hover:bg-orange-50 font-bold px-8 py-3.5 rounded-2xl text-base shadow-xl hover:shadow-2xl transition-all hover:scale-105">
                 <CalendarCheck className="h-5 w-5" /> Book Now
               </button>
             </div>
           </div>
         </div>
 
-        {/* Stats */}
         <div className="max-w-4xl mx-auto px-4 -mt-10 relative z-10">
-          <div className="bg-white rounded-2xl shadow-lg border border-primary/10 grid grid-cols-2 sm:grid-cols-4 divide-x divide-gray-100">
+          <div className="bg-white rounded-2xl shadow-lg border border-orange-100 grid grid-cols-2 sm:grid-cols-4 divide-x divide-gray-100">
             {[
               { icon: <Star className="h-4 w-4 text-amber-500 fill-amber-500" />, val: avgRating > 0 ? Number(avgRating).toFixed(1) : "N/A", lbl: "Rating" },
               { icon: <MessageCircle className="h-4 w-4 text-blue-500" />, val: reviews.length, lbl: "Reviews" },
               { icon: <Briefcase className="h-4 w-4 text-green-500" />, val: contractor.completedJobs || 0, lbl: "Jobs Done" },
-              { icon: <Camera className="h-4 w-4 text-primary" />, val: workMedia.length, lbl: "Work Media" },
+              { icon: <Camera className="h-4 w-4 text-orange-500" />, val: workMedia.length, lbl: "Work Media" },
             ].map((s, i) => (
               <div key={i} className="flex flex-col items-center py-4 px-2 gap-1">
                 <div className="flex items-center gap-1.5">{s.icon}<span className="text-xl font-extrabold text-gray-800">{s.val}</span></div>
@@ -690,7 +765,6 @@ export default function ContractorDetail() {
         <div className="max-w-4xl mx-auto px-4 mt-6 pb-16">
           <div className="flex flex-col lg:flex-row gap-5">
             <div className="flex-1 min-w-0">
-              {/* Tabs */}
               <div className="flex gap-1 bg-white rounded-2xl p-1 border border-gray-100 shadow-sm mb-5">
                 {([
                   { key: "overview", label: "Overview" },
@@ -698,27 +772,35 @@ export default function ContractorDetail() {
                   { key: "reviews", label: `Reviews (${reviews.length})` },
                 ] as const).map(t => (
                   <button key={t.key} onClick={() => setTab(t.key)}
-                    className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${tab === t.key ? "bg-gradient-to-r from-primary to-secondary text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
+                    className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all ${tab === t.key ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm" : "text-gray-500 hover:text-gray-700"}`}>
                     {t.label}
                   </button>
                 ))}
               </div>
 
-              {/* Overview */}
               {tab === "overview" && (
                 <div className="space-y-4">
-
+                  {(contractor.priceMin || contractor.priceMax) && (
+                    <div className="bg-white rounded-2xl border border-gray-100 p-5">
+                      <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm"><span className="text-orange-500 text-base">₹</span> Price Range</h3>
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-orange-50 rounded-xl p-4 text-center"><p className="text-xs text-gray-400 mb-1">Minimum</p><p className="text-2xl font-extrabold text-orange-600">₹{contractor.priceMin?.toLocaleString()}</p></div>
+                        <span className="text-gray-300 font-bold text-xl">—</span>
+                        <div className="flex-1 bg-amber-50 rounded-xl p-4 text-center"><p className="text-xs text-gray-400 mb-1">Maximum</p><p className="text-2xl font-extrabold text-amber-600">₹{contractor.priceMax?.toLocaleString()}</p></div>
+                      </div>
+                    </div>
+                  )}
                   {contractor.description && (
                     <div className="bg-white rounded-2xl border border-gray-100 p-5">
-                      <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm"><Users className="h-4 w-4 text-primary" /> About</h3>
+                      <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm"><Users className="h-4 w-4 text-orange-500" /> About</h3>
                       <p className="text-sm text-gray-600 leading-relaxed">{contractor.description}</p>
                     </div>
                   )}
                   {workMedia.length > 0 && (
                     <div className="bg-white rounded-2xl border border-gray-100 p-5">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-bold text-gray-800 flex items-center gap-2 text-sm"><Camera className="h-4 w-4 text-primary" /> Work Highlights</h3>
-                        <button onClick={() => setTab("work")} className="text-xs text-primary font-semibold hover:underline">View All →</button>
+                        <h3 className="font-bold text-gray-800 flex items-center gap-2 text-sm"><Camera className="h-4 w-4 text-orange-500" /> Work Highlights</h3>
+                        <button onClick={() => setTab("work")} className="text-xs text-orange-500 font-semibold hover:underline">View All →</button>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         {workMedia.slice(0, 6).map((m, i) => (
@@ -735,7 +817,7 @@ export default function ContractorDetail() {
                     <div className="bg-white rounded-2xl border border-gray-100 p-5">
                       <div className="flex items-center justify-between mb-4">
                         <h3 className="font-bold text-gray-800 flex items-center gap-2 text-sm"><Star className="h-4 w-4 text-amber-500" /> Latest Review</h3>
-                        <button onClick={() => setTab("reviews")} className="text-xs text-primary font-semibold hover:underline">View All →</button>
+                        <button onClick={() => setTab("reviews")} className="text-xs text-orange-500 font-semibold hover:underline">View All →</button>
                       </div>
                       <ReviewCard review={reviews[0]} />
                     </div>
@@ -743,7 +825,6 @@ export default function ContractorDetail() {
                 </div>
               )}
 
-              {/* Work */}
               {tab === "work" && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between flex-wrap gap-3">
@@ -754,13 +835,13 @@ export default function ContractorDetail() {
                         { key: "video", label: `Videos (${vidCount})`, icon: <Video className="h-3 w-3" /> },
                       ].map(f => (
                         <button key={f.key} onClick={() => setMediaFilter(f.key as any)}
-                          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${mediaFilter === f.key ? "bg-primary text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-primary/30"}`}>
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${mediaFilter === f.key ? "bg-orange-500 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"}`}>
                           {f.icon} {f.label}
                         </button>
                       ))}
                     </div>
                     {isContractor && (
-                      <button onClick={() => setShowUpload(true)} className="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 shadow-sm">
+                      <button onClick={() => setShowUpload(true)} className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:opacity-90 shadow-sm">
                         <Plus className="h-4 w-4" /> Add Photo/Video
                       </button>
                     )}
@@ -769,16 +850,16 @@ export default function ContractorDetail() {
                     <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
                       <Camera className="h-10 w-10 text-gray-200 mx-auto mb-3" />
                       <p className="text-gray-400 text-sm mb-4">No media available</p>
-                      {isContractor && <button onClick={() => setShowUpload(true)} className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 mx-auto"><Plus className="h-4 w-4" /> Add First Photo/Video</button>}
+                      {isContractor && <button onClick={() => setShowUpload(true)} className="flex items-center gap-2 bg-orange-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 mx-auto"><Plus className="h-4 w-4" /> Add First Photo/Video</button>}
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {filteredMedia.map((m, i) => (
-                        <div key={m.id || i} className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary/30 hover:shadow-md transition-all">
+                        <div key={m.id || i} className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-300 hover:shadow-md transition-all">
                           <button onClick={() => setLightbox({ open: true, index: i })} className="w-full text-left">
                             <div className="aspect-square relative overflow-hidden">
                               {m.type === "video" ? <VideoThumbnail url={m.url} className="w-full h-full" /> : <img src={m.thumbnail || m.url} alt={m.caption || ""} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />}
-                              {m.type === "video" && <div className="absolute inset-0 flex items-center justify-center"><div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg"><Play className="h-5 w-5 text-primary fill-primary ml-0.5" /></div></div>}
+                              {m.type === "video" && <div className="absolute inset-0 flex items-center justify-center"><div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg"><Play className="h-5 w-5 text-orange-500 fill-orange-500 ml-0.5" /></div></div>}
                               {m.type === "image" && <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><ZoomIn className="h-7 w-7 text-white drop-shadow-lg" /></div>}
                               <span className={`absolute top-2 left-2 text-white text-[10px] font-bold px-2 py-0.5 rounded-full ${m.type === "video" ? "bg-red-500" : "bg-black/50"}`}>{m.type === "video" ? "VIDEO" : "IMG"}</span>
                             </div>
@@ -791,7 +872,6 @@ export default function ContractorDetail() {
                 </div>
               )}
 
-              {/* Reviews */}
               {tab === "reviews" && (
                 <div className="space-y-4">
                   {reviews.length > 0 && (
@@ -819,14 +899,14 @@ export default function ContractorDetail() {
                       </div>
                     </div>
                   )}
-                  <button onClick={() => setShowReview(true)} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-2xl font-semibold text-sm hover:opacity-90 shadow-sm">
+                  <button onClick={() => setShowReview(true)} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-2xl font-semibold text-sm hover:opacity-90 shadow-sm">
                     <PenLine className="h-4 w-4" /> Write a Review
                   </button>
                   {reviews.length === 0 ? (
                     <div className="text-center py-14 bg-white rounded-2xl border border-gray-100">
                       <Star className="h-10 w-10 text-gray-200 mx-auto mb-3" />
                       <p className="text-gray-400 text-sm mb-3">No reviews yet. Be the first!</p>
-                      <button onClick={() => setShowReview(true)} className="text-primary font-semibold text-sm hover:underline">Write a Review →</button>
+                      <button onClick={() => setShowReview(true)} className="text-orange-500 font-semibold text-sm hover:underline">Write a Review →</button>
                     </div>
                   ) : (
                     <div className="space-y-3">{reviews.map((r, i) => <ReviewCard key={r.id || i} review={r} />)}</div>
@@ -835,14 +915,13 @@ export default function ContractorDetail() {
               )}
             </div>
 
-            {/* Sidebar */}
             <div className="lg:w-64 flex-shrink-0 space-y-4">
               <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm lg:sticky lg:top-4">
-                <button onClick={() => setShowBookNow(true)} className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-primary to-secondary text-white py-3.5 px-4 rounded-xl font-bold text-base hover:opacity-90 mb-3 shadow-md">
+                <button onClick={() => setShowBookNow(true)} className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3.5 px-4 rounded-xl font-bold text-base hover:opacity-90 mb-3 shadow-md">
                   <CalendarCheck className="h-5 w-5" /> Book Now
                 </button>
                 <div className="border-t border-gray-100 mt-3 pt-3 space-y-2.5">
-
+                  {(contractor.priceMin || contractor.priceMax) && <div className="flex justify-between text-sm"><span className="text-gray-500">Price</span><span className="font-semibold text-gray-800">₹{contractor.priceMin}–₹{contractor.priceMax}/day</span></div>}
                   {contractor.workers && <div className="flex justify-between text-sm"><span className="text-gray-500">Workers</span><span className="font-semibold text-gray-800">{contractor.workers}</span></div>}
                   {contractor.city && <div className="flex justify-between text-sm"><span className="text-gray-500">City</span><span className="font-semibold text-gray-800">{contractor.city}</span></div>}
                   {contractor.category && <div className="flex justify-between text-sm"><span className="text-gray-500">Category</span><span className="font-semibold text-gray-800">{contractor.category}</span></div>}
@@ -854,7 +933,7 @@ export default function ContractorDetail() {
                   { icon: <Shield className="h-4 w-4 text-green-500" />, text: "Identity Verified" },
                   { icon: <Award className="h-4 w-4 text-amber-500" />, text: "Top Rated Contractor" },
                   { icon: <CheckCircle2 className="h-4 w-4 text-blue-500" />, text: "Background Check Done" },
-                  { icon: <ThumbsUp className="h-4 w-4 text-primary" />, text: "95% Client Satisfaction" },
+                  { icon: <ThumbsUp className="h-4 w-4 text-orange-500" />, text: "95% Client Satisfaction" },
                 ].map((b, i) => (
                   <div key={i} className="flex items-center gap-2.5 mb-2.5 last:mb-0">{b.icon}<span className="text-xs text-gray-600 font-medium">{b.text}</span></div>
                 ))}
