@@ -187,7 +187,7 @@ export default function Home() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button size="lg" variant="secondary" onClick={() => navigate("/contractors")} className="shadow-lg hover:shadow-xl transition-all">
-                Browse All Contractors
+                Find ALL Services
               </Button>
               {/* ✅ Sirf contractor/admin/not-logged-in ko dikhao */}
               {showBecomeContractor && (
@@ -195,7 +195,7 @@ export default function Home() {
                   className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary shadow-lg"
                   onClick={() => navigate("/register-contractor")}>
                   <CheckCircle className="h-5 w-5 mr-2" />
-                  Become a Contractor
+                  Register Your Services
                 </Button>
               )}
             </div>
@@ -335,13 +335,13 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" variant="secondary" onClick={() => navigate("/contractors")} className="text-lg px-8 py-6 shadow-2xl hover:shadow-3xl transition-all">
-              <Search className="h-6 w-6 mr-2" /> Browse Contractors
+              <Search className="h-6 w-6 mr-2" /> Find Services
             </Button>
             {showBecomeContractor && (
               <Button size="lg" variant="outline"
                 className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-6 shadow-2xl"
                 onClick={() => navigate("/register-contractor")}>
-                <CheckCircle className="h-6 w-6 mr-2" /> Become a Contractor
+                <CheckCircle className="h-6 w-6 mr-2" /> Register Your Services
               </Button>
             )}
           </div>
