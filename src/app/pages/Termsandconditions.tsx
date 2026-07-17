@@ -24,11 +24,10 @@ const sections = [
       "Profile activation may take 24-48 hours after registration for verification purposes.",
       "Contractors must maintain valid identification and necessary licenses for their work category.",
       "Premium listings and sponsored placements are available through our premium plans.",
-      "LabourMatch reserves the right to remove contractor profiles that receive consistent negative feedback."
-
-      
-
-     
+      "LabourMatch reserves the right to remove contractor profiles that receive consistent negative feedback.",
+      "Contractors must complete any work assignment accepted through the platform. Leaving work incomplete or abandoning a project midway is a serious violation of these terms.",
+      "If a contractor abandons or incompletely performs a job obtained through LabourMatch, a penalty may be imposed. This penalty is payable to both LabourMatch and the affected client as determined by the company.",
+      "LabourMatch reserves the right to suspend or permanently ban contractor accounts in case of repeated work abandonment or client complaints regarding incomplete services."
     ]
   },
   {
@@ -85,35 +84,46 @@ const sections = [
 
 export default function TermsAndConditions() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-primary via-primary/90 to-secondary py-16 px-4">
+      <div className="bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-700 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <FileText className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-white mb-4">Terms & Conditions</h1>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto">
+          <p className="text-white/85 text-lg max-w-2xl mx-auto">
             Please read these terms carefully before using LabourMatch. By accessing our platform, you agree to be bound by these terms.
           </p>
-          <p className="text-white/50 text-sm mt-4">Last updated: April 2026 • Effective immediately</p>
+          <p className="text-white/60 text-sm mt-4">Last updated: April 2026 • Effective immediately</p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12">
 
         {/* Agreement Banner */}
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8 flex items-start gap-4">
-          <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
-          <p className="text-amber-700 text-sm leading-relaxed">
+        <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5 mb-8 flex items-start gap-4">
+          <AlertTriangle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+          <p className="text-teal-800 text-sm leading-relaxed">
             <strong>Important:</strong> By creating an account or using LabourMatch services, you acknowledge that you have read,
             understood, and agree to be bound by these Terms & Conditions and our Privacy Policy. If you do not agree,
             please do not use our platform.
           </p>
         </div>
 
+        {/* Work Completion Warning Banner */}
+        <div className="bg-white border border-teal-300 rounded-2xl p-5 mb-8 flex items-start gap-4 shadow-sm">
+          <AlertTriangle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-teal-800 text-sm font-bold mb-1">⚠️ All Service Providers — Work Completion Policy</p>
+            <p className="text-teal-700 text-sm leading-relaxed">
+              Any service provider who abandons or incompletely performs work obtained through LabourMatch may face a <strong>penalty</strong> payable to LabourMatch and the affected client. Repeated violations will result in permanent account suspension.
+            </p>
+          </div>
+        </div>
+
         {/* Intro */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8 shadow-sm">
+        <div className="bg-white rounded-2xl border border-teal-100 p-6 mb-8 shadow-sm">
           <p className="text-gray-600 leading-relaxed">
             These Terms & Conditions ("Terms") govern your use of the <strong>LabourMatch</strong> platform, including our website,
             mobile application, and all related services. LabourMatch operates as an online marketplace connecting individuals
@@ -125,10 +135,10 @@ export default function TermsAndConditions() {
         {/* Sections */}
         <div className="space-y-6">
           {sections.map((section, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-              <div className="flex items-center gap-4 p-6 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
-                <div className="w-10 h-10 bg-gray-800/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <section.icon className="h-5 w-5 text-gray-700" />
+            <div key={idx} className="bg-white rounded-2xl border border-teal-100 overflow-hidden shadow-sm">
+              <div className="flex items-center gap-4 p-6 border-b border-teal-50 bg-gradient-to-r from-teal-50 to-white">
+                <div className="w-10 h-10 bg-teal-600/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <section.icon className="h-5 w-5 text-teal-700" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-800">{idx + 1}. {section.title}</h2>
               </div>
@@ -136,8 +146,17 @@ export default function TermsAndConditions() {
                 <ul className="space-y-3">
                   {section.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <ChevronRight className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                      <p className="text-gray-500 text-sm leading-relaxed">{item}</p>
+                      <ChevronRight className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
+                        // Highlight penalty clauses
+                        item.includes("penalty") || item.includes("abandon") || item.includes("incomplete")
+                          ? "text-teal-600"
+                          : "text-teal-400"
+                      }`} />
+                      <p className={`text-sm leading-relaxed ${
+                        item.includes("penalty") || item.includes("abandon") || item.includes("incomplete")
+                          ? "text-teal-700 font-medium"
+                          : "text-gray-500"
+                      }`}>{item}</p>
                     </li>
                   ))}
                 </ul>
@@ -147,7 +166,7 @@ export default function TermsAndConditions() {
         </div>
 
         {/* Governing Law */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-teal-100 p-6 mt-6 shadow-sm">
           <h2 className="text-xl font-bold text-gray-800 mb-4">7. Governing Law & Disputes</h2>
           <p className="text-gray-500 text-sm leading-relaxed mb-3">
             These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from these
@@ -159,7 +178,7 @@ export default function TermsAndConditions() {
         </div>
 
         {/* Termination */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-teal-100 p-6 mt-6 shadow-sm">
           <h2 className="text-xl font-bold text-gray-800 mb-4">8. Termination</h2>
           <p className="text-gray-500 text-sm leading-relaxed">
             LabourMatch reserves the right to terminate or suspend your account at any time, with or without notice, for conduct
@@ -169,7 +188,7 @@ export default function TermsAndConditions() {
         </div>
 
         {/* Changes */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-teal-100 p-6 mt-6 shadow-sm">
           <h2 className="text-xl font-bold text-gray-800 mb-4">9. Changes to Terms</h2>
           <p className="text-gray-500 text-sm leading-relaxed">
             We reserve the right to modify these Terms at any time. We will provide notice of significant changes by updating
@@ -179,18 +198,18 @@ export default function TermsAndConditions() {
         </div>
 
         {/* Contact */}
-        <div className="bg-gradient-to-br from-primary via-primary/90 to-secondary py-16 px-4">
-          <h2 className="text-xl font-bold mb-4">Contact & Support</h2>
-          <p className="text-white/70 text-sm mb-4">
+        <div className="bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-700 rounded-2xl p-8 mt-6">
+          <h2 className="text-xl font-bold text-white mb-4">Contact & Support</h2>
+          <p className="text-white/75 text-sm mb-4">
             For questions about these Terms & Conditions, please contact our legal team:
           </p>
           <div className="space-y-3">
-            <div className="flex items-center gap-3 text-sm text-white/80">
-              <Mail className="h-4 w-4 text-white/60" />
-              <span>legal@labourmatch.in</span>
+            <div className="flex items-center gap-3 text-sm text-white/85">
+              <Mail className="h-4 w-4 text-white/70" />
+              <span>labourmatch91@gmail.com</span>
             </div>
-            <div className="flex items-center gap-3 text-sm text-white/80">
-              <Phone className="h-4 w-4 text-white/60" />
+            <div className="flex items-center gap-3 text-sm text-white/85">
+              <Phone className="h-4 w-4 text-white/70" />
               <span>+91 8128860779</span>
             </div>
           </div>
