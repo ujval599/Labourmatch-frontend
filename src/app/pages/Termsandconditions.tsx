@@ -25,9 +25,8 @@ const sections = [
       "Contractors must maintain valid identification and necessary licenses for their work category.",
       "Premium listings and sponsored placements are available through our premium plans.",
       "LabourMatch reserves the right to remove contractor profiles that receive consistent negative feedback."
-      "Contractors must complete any work assignment accepted through the platform. Leaving work incomplete or abandoning a project midway is a serious violation of these terms.",
-"If a contractor abandons or incompletely performs a job obtained through LabourMatch, a penalty may be imposed. This penalty is payable to both LabourMatch and the affected client as determined by the company.",
-"LabourMatch reserves the right to suspend or permanently ban contractor accounts in case of repeated work abandonment or client complaints regarding incomplete services."
+
+      
 
      
     ]
