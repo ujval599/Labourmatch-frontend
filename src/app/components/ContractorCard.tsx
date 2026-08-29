@@ -11,9 +11,7 @@ export interface Contractor {
   rating: number;
   reviews: number;
   workers: number;
-  priceRange: string;
   location: string;
-  // ✅ FIX 1: dono field accept karo — backend "imageUrl" bhejta hai, component "image" use karta tha
   image?: string;
   imageUrl?: string;
   verified: boolean;
@@ -24,11 +22,9 @@ interface ContractorCardProps {
   contractor: Contractor;
 }
 
-// ✅ FIX 2: Fallback image — /public folder mein rakho ya online placeholder use karo
 const FALLBACK_IMAGE = "https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image";
 
 export function ContractorCard({ contractor }: ContractorCardProps) {
-  // ✅ FIX 3: imageUrl ya image — jo bhi available ho woh use karo
   const imageSrc = contractor.imageUrl || contractor.image || FALLBACK_IMAGE;
 
   return (
@@ -39,7 +35,6 @@ export function ContractorCard({ contractor }: ContractorCardProps) {
           alt={contractor.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           onError={(e) => {
-            // ✅ FIX 4: Image load fail ho toh placeholder dikho
             (e.target as HTMLImageElement).src = FALLBACK_IMAGE;
           }}
         />
@@ -78,14 +73,8 @@ export function ContractorCard({ contractor }: ContractorCardProps) {
             </div>
           </div>
 
+          {/* ✅ Price removed — sirf View Details button */}
           <div className="pt-3 border-t border-border">
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <p className="text-xs text-muted-foreground">Starting from</p>
-                <p className="font-bold text-lg text-primary">{contractor.priceRange}</p>
-                <p className="text-xs text-muted-foreground">per worker/day</p>
-              </div>
-            </div>
             <div className="flex gap-2">
               <Link to={`/contractor/${contractor.id}`} className="flex-1">
                 <Button size="sm" className="w-full shadow-sm">View Details</Button>

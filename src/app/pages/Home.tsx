@@ -68,7 +68,6 @@ export default function Home() {
             rating: c.rating || 0,
             reviews: c.reviewCount || 0,
             workers: c.workers,
-            priceRange: `₹${c.priceMin}-${c.priceMax}/day`,
             location: c.city || c.location,
             imageUrl: c.imageUrl || null,
             image: c.imageUrl || null,
