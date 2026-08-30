@@ -1,5 +1,5 @@
-import { createBrowserRouter, Navigate, useNavigate } from "react-router";
-import { useState, useEffect, useRef } from "react";
+import { createBrowserRouter, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
 import MyBookings from "./pages/MyBookings";
 import PremiumPlans from "./pages/PremiumPlans";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -7,6 +7,7 @@ import Root from "./Root";
 import Home from "./pages/Home";
 import ContractorListing from "./pages/ContractorListing";
 import ContractorDetail from "./pages/ContractorDetail";
+import ContractorProfile from "./pages/ContractorProfile";
 import RegisterContractor from "./pages/RegisterContractor";
 import Auth from "./pages/Auth";
 import About from "./pages/About";
@@ -15,18 +16,11 @@ import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/Privacypolicy";
 import TermsAndConditions from "./pages/Termsandconditions";
 import ForgotPassword from "./pages/ForgotPassword";
-import ContractorProfile from "./pages/ContractorProfile";
 
-// ✅ Login Required Modal
-function LoginRequiredModal({ onClose, onLogin, countdown }: {
-  onClose: () => void;
-  onLogin: () => void;
-  countdown?: number;
-}) {
+// ✅ Login Required Popup
+function LoginRequiredModal({ onClose, onLogin }: { onClose: () => void; onLogin: () => void }) {
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
+    const handleKeyDown = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
     return () => {
@@ -36,180 +30,117 @@ function LoginRequiredModal({ onClose, onLogin, countdown }: {
   }, [onClose]);
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-      style={{ backgroundColor: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)" }}
-    >
-      <div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative"
-        style={{ animation: "fadeInScale 0.3s ease-out" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <style>{`
-          @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.92) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-          }
-          @keyframes countdown {
-            from { stroke-dashoffset: 0; }
-            to { stroke-dashoffset: 126; }
-          }
-        `}</style>
-
-        {/* Logo */}
-        <div className="flex justify-center mb-4">
-          <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg"
-            style={{ background: "linear-gradient(135deg, #16a34a, #0d9488)" }}>
-            <span className="text-white font-black text-3xl">LM</span>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)" }}
+      onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative"
+        onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold">✕</button>
+        <div className="flex justify-center mb-5">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
           </div>
         </div>
-
-        {/* Text */}
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
-          Join LabourMatch! 
-        </h2>
-        <p className="text-center text-gray-500 mb-2 text-sm leading-relaxed">
-          You’ve seen our platform — now log in to get full access!
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Pehle Login Karo! 🔐</h2>
+        <p className="text-center text-gray-500 mb-7 text-base leading-relaxed">
+          Yeh feature use karne ke liye pehle login ya register karo. Sirf 1 minute lagega!
         </p>
-        <p className="text-center text-gray-400 mb-6 text-xs">
-         Find verified contractors • Book instantly • Chat directly.
-        </p>
-
-        {/* Buttons */}
         <div className="flex flex-col gap-3">
-          <button
-            onClick={onLogin}
-            className="w-full py-3.5 rounded-xl font-bold text-white text-base transition-all shadow-md hover:shadow-lg hover:opacity-90 active:scale-95"
-            style={{ background: "linear-gradient(135deg, #16a34a, #0d9488)" }}
-          >
-             Login / Sign Up 
+          <button onClick={onLogin}
+            className="w-full py-3.5 rounded-xl font-semibold text-white text-base transition-all shadow-md hover:opacity-90 bg-primary">
+            Login / Sign Up
+          </button>
+          <button onClick={onClose}
+            className="w-full py-3 rounded-xl font-medium text-gray-500 text-sm border border-gray-200 hover:bg-gray-50">
+            Baad Mein
           </button>
         </div>
-
-        
       </div>
     </div>
   );
 }
 
-// ✅ 20 Second Timer Hook — shared across all pages
-const TIMER_KEY = "lm_guest_start";
-const SHOWN_KEY = "lm_popup_shown";
-const DISMISSED_KEY = "lm_popup_dismissed";
-
-function useGuestTimer() {
-  const [showPopup, setShowPopup] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(20);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) return; // Logged in — no timer needed
-
-    // Already dismissed this session
-    const dismissed = sessionStorage.getItem(DISMISSED_KEY);
-    if (dismissed) return;
-
-    // Already shown popup
-    const shown = sessionStorage.getItem(SHOWN_KEY);
-    if (shown) {
-      setShowPopup(true);
-      return;
-    }
-
-    // Start or resume timer
-    const startTime = sessionStorage.getItem(TIMER_KEY);
-    if (!startTime) {
-      sessionStorage.setItem(TIMER_KEY, Date.now().toString());
-    }
-
-    intervalRef.current = setInterval(() => {
-      const start = parseInt(sessionStorage.getItem(TIMER_KEY) || Date.now().toString());
-      const elapsed = Math.floor((Date.now() - start) / 1000);
-      const remaining = Math.max(0, 20 - elapsed);
-      setTimeLeft(remaining);
-
-      if (remaining <= 0) {
-        clearInterval(intervalRef.current!);
-        sessionStorage.setItem(SHOWN_KEY, "true");
-        setShowPopup(true);
-      }
-    }, 500);
-
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, []);
-
-  const dismiss = () => {
-    sessionStorage.setItem(DISMISSED_KEY, "true");
-    setShowPopup(false);
-  };
-
-  return { showPopup, timeLeft, dismiss };
-}
-
-// ✅ Guest Wrapper — 20 sec timer, then popup
-function GuestTimerWrapper({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const { showPopup, timeLeft, dismiss } = useGuestTimer();
-
-  const handleLogin = () => {
-    dismiss();
-    navigate("/auth");
-  };
-
-  // Logged in — show content directly
-  if (token) return <>{children}</>;
-
-  return (
-    <>
-      {/* Content always visible */}
-      <div style={{ filter: showPopup ? "blur(3px)" : "none", transition: "filter 0.3s" }}>
-        {children}
-      </div>
-
-      {/* Popup after 20 seconds */}
-      {showPopup && (
-        <LoginRequiredModal
-          onClose={dismiss}
-          onLogin={handleLogin}
-        />
-      )}
-    </>
-  );
-}
-
-// ✅ Protected Route — Login required immediately (admin, profile, bookings)
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+// ✅ Login Required Route — page dikh ta hai, 60 sec baad popup
+function LoginRoute({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (!token) setShowModal(true);
+    if (!token) {
+      // ✅ 60 seconds baad popup dikhao
+      const timer = setTimeout(() => setShowModal(true), 60000);
+      return () => clearTimeout(timer);
+    }
   }, [token]);
 
-  const handleLogin = () => {
-    setShowModal(false);
-    navigate("/auth");
-  };
-
-  const handleClose = () => {
-    setShowModal(false);
-    navigate(-1);
-  };
+  const handleLogin = () => { setShowModal(false); navigate("/auth"); };
+  const handleClose = () => { setShowModal(false); navigate(-1); };
 
   if (!token) {
     return (
       <>
-        <div style={{
-          filter: showModal ? "blur(2px)" : "none",
-          pointerEvents: "none",
-          minHeight: "60vh",
-          background: "linear-gradient(135deg, #f0fdf4, #f0fdfa)",
-        }} />
+        {/* ✅ Page dikh ta hai — blur nahi */}
+        {children}
+        {showModal && <LoginRequiredModal onClose={handleClose} onLogin={handleLogin} />}
+      </>
+    );
+  }
+
+  return <>{children}</>;
+}
+
+// ✅ Admin Only Route — sirf admin dekh sakta hai
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [showModal, setShowModal] = useState(false);
+
+  let isAdmin = false;
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    isAdmin = user?.role === "ADMIN";
+  } catch {}
+
+  useEffect(() => {
+    if (!token || !isAdmin) setShowModal(true);
+  }, [token, isAdmin]);
+
+  const handleLogin = () => { setShowModal(false); navigate("/auth"); };
+  const handleClose = () => { setShowModal(false); navigate("/"); };
+
+  if (!token || !isAdmin) {
+    return (
+      <>
+        <div style={{ filter: "blur(3px)", pointerEvents: "none", minHeight: "80vh", background: "#f3f4f6" }} />
         {showModal && (
-          <LoginRequiredModal onClose={handleClose} onLogin={handleLogin} />
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)" }}>
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 text-center">
+              <div className="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-red-500">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied! 🚫</h2>
+              <p className="text-gray-500 mb-7">Yeh page sirf Admin ke liye hai.</p>
+              <div className="flex flex-col gap-3">
+                {!token && (
+                  <button onClick={handleLogin}
+                    className="w-full py-3.5 rounded-xl font-semibold text-white bg-primary hover:opacity-90">
+                    Admin Login
+                  </button>
+                )}
+                <button onClick={handleClose}
+                  className="w-full py-3 rounded-xl font-medium text-gray-500 text-sm border border-gray-200 hover:bg-gray-50">
+                  Go to Home
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </>
     );
@@ -218,61 +149,92 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// ✅ Global 60 sec popup — bina login ke koi bhi page pe
+function GlobalSignupReminder() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      const timer = setTimeout(() => setShowModal(true), 60000);
+      return () => clearTimeout(timer);
+    }
+  }, [token]);
+
+  if (!showModal || token) return null;
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)" }}
+      onClick={() => setShowModal(false)}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 relative"
+        onClick={(e) => e.stopPropagation()}>
+        <button onClick={() => setShowModal(false)}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold">✕</button>
+        <div className="flex justify-center mb-5">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="text-primary">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </div>
+        </div>
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">LabourMatch Join Karo! 🎉</h2>
+        <p className="text-center text-gray-500 mb-7 text-base leading-relaxed">
+          Hazaaron contractors aur customers already LabourMatch use kar rahe hain. Aap bhi join karo — bilkul FREE!
+        </p>
+        <div className="flex flex-col gap-3">
+          <button onClick={() => { setShowModal(false); navigate("/auth"); }}
+            className="w-full py-3.5 rounded-xl font-semibold text-white text-base transition-all shadow-md hover:opacity-90 bg-primary">
+            Sign Up — Free Mein
+          </button>
+          <button onClick={() => setShowModal(false)}
+            className="w-full py-3 rounded-xl font-medium text-gray-500 text-sm border border-gray-200 hover:bg-gray-50">
+            Baad Mein
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ✅ Root wrapper with global popup
+function RootWithPopup() {
+  return (
+    <>
+      <Root />
+      <GlobalSignupReminder />
+    </>
+  );
+}
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: Root,
+    Component: RootWithPopup,
     children: [
-      // ✅ Public routes — no timer
+      // ✅ PUBLIC — auth pages
       { path: "auth", Component: Auth },
       { path: "privacy-policy", Component: PrivacyPolicy },
       { path: "terms-and-conditions", Component: TermsAndConditions },
       { path: "forgot-password", Component: ForgotPassword },
       { path: "*", Component: NotFound },
 
-      // ✅ Guest routes — 20 sec free, then popup
-      {
-        index: true,
-        element: <GuestTimerWrapper><Home /></GuestTimerWrapper>,
-      },
-      {
-        path: "contractors",
-        element: <GuestTimerWrapper><ContractorListing /></GuestTimerWrapper>,
-      },
-      {
-        path: "contractor/:id",
-        element: <GuestTimerWrapper><ContractorDetail /></GuestTimerWrapper>,
-      },
-      {
-        path: "register-contractor",
-        element: <GuestTimerWrapper><RegisterContractor /></GuestTimerWrapper>,
-      },
-      {
-        path: "about",
-        element: <GuestTimerWrapper><About /></GuestTimerWrapper>,
-      },
-      {
-        path: "contact",
-        element: <GuestTimerWrapper><Contact /></GuestTimerWrapper>,
-      },
+      // ✅ PUBLIC — bina login ke sab dikh ta hai
+      { index: true, Component: Home },
+      { path: "contractors", Component: ContractorListing },
+      { path: "contractor/:id", Component: ContractorDetail },
+      { path: "about", Component: About },
+      { path: "contact", Component: Contact },
+      { path: "register-contractor", Component: RegisterContractor },
+      { path: "premium", Component: PremiumPlans },
 
-      // ✅ Protected routes — login required immediately
-      {
-        path: "my-bookings",
-        element: <ProtectedRoute><MyBookings /></ProtectedRoute>,
-      },
-      {
-        path: "premium",
-        element: <ProtectedRoute><PremiumPlans /></ProtectedRoute>,
-      },
-      {
-        path: "admin",
-        element: <ProtectedRoute><AdminDashboard /></ProtectedRoute>,
-      },
-      {
-        path: "my-profile",
-        element: <ProtectedRoute><ContractorProfile /></ProtectedRoute>,
-      },
+      // ✅ LOGIN REQUIRED — popup aayega
+      { path: "my-bookings", element: <LoginRoute><MyBookings /></LoginRoute> },
+      { path: "my-profile", element: <LoginRoute><ContractorProfile /></LoginRoute> },
+
+      // ✅ ADMIN ONLY — sirf admin dekh sakta hai
+      { path: "admin", element: <AdminRoute><AdminDashboard /></AdminRoute> },
     ],
   },
 ]);
