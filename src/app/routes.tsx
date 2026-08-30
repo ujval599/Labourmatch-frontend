@@ -44,9 +44,9 @@ function LoginRequiredModal({ onClose, onLogin }: { onClose: () => void; onLogin
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Pehle Login Karo! 🔐</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Login Required! 🔐</h2>
         <p className="text-center text-gray-500 mb-7 text-base leading-relaxed">
-          Yeh feature use karne ke liye pehle login ya register karo. Sirf 1 minute lagega!
+          Please login or register to use this feature. It only takes 1 minute!
         </p>
         <div className="flex flex-col gap-3">
           <button onClick={onLogin}
@@ -55,7 +55,7 @@ function LoginRequiredModal({ onClose, onLogin }: { onClose: () => void; onLogin
           </button>
           <button onClick={onClose}
             className="w-full py-3 rounded-xl font-medium text-gray-500 text-sm border border-gray-200 hover:bg-gray-50">
-            Baad Mein
+            Maybe Later
           </button>
         </div>
       </div>
@@ -126,7 +126,7 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
                 </svg>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied! 🚫</h2>
-              <p className="text-gray-500 mb-7">Yeh page sirf Admin ke liye hai.</p>
+              <p className="text-gray-500 mb-7">This page is for Admins only.</p>
               <div className="flex flex-col gap-3">
                 {!token && (
                   <button onClick={handleLogin}
@@ -179,18 +179,18 @@ function GlobalSignupReminder() {
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">LabourMatch Join Karo! 🎉</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Join LabourMatch Today! 🎉</h2>
         <p className="text-center text-gray-500 mb-7 text-base leading-relaxed">
-          Hazaaron contractors aur customers already LabourMatch use kar rahe hain. Aap bhi join karo — bilkul FREE!
+          Thousands of contractors and customers are already using LabourMatch. Join now — completely FREE!
         </p>
         <div className="flex flex-col gap-3">
           <button onClick={() => { setShowModal(false); navigate("/auth"); }}
             className="w-full py-3.5 rounded-xl font-semibold text-white text-base transition-all shadow-md hover:opacity-90 bg-primary">
-            Sign Up — Free Mein
+            Sign Up — It's Free
           </button>
           <button onClick={() => setShowModal(false)}
             className="w-full py-3 rounded-xl font-medium text-gray-500 text-sm border border-gray-200 hover:bg-gray-50">
-            Baad Mein
+            Maybe Later
           </button>
         </div>
       </div>
