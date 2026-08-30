@@ -179,14 +179,14 @@ function GlobalSignupReminder() {
             </svg>
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Join LabourMatch Today! 🎉</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">Join LabourMatch Today! </h2>
         <p className="text-center text-gray-500 mb-7 text-base leading-relaxed">
-          Thousands of contractors and customers are already using LabourMatch. Join now — completely FREE!
+          Thousands of  customers are already using LabourMatch. Join now!
         </p>
         <div className="flex flex-col gap-3">
           <button onClick={() => { setShowModal(false); navigate("/auth"); }}
             className="w-full py-3.5 rounded-xl font-semibold text-white text-base transition-all shadow-md hover:opacity-90 bg-primary">
-            Sign Up — It's Free
+            Sign Up 
           </button>
           <button onClick={() => setShowModal(false)}
             className="w-full py-3 rounded-xl font-medium text-gray-500 text-sm border border-gray-200 hover:bg-gray-50">
