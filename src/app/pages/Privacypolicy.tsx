@@ -11,12 +11,12 @@ export default function PrivacyPolicy() {
             <Shield className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Privacy Policy</h1>
-          <p className="opacity-85 text-lg">Your privacy is important to us. Here's how we protect your data.</p>
+          <p className="opacity-85 text-lg">Your privacy is important to us. Here is how we protect your data.</p>
           <p className="opacity-70 text-sm mt-2">Last updated: January 2025</p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
+      <div className="max-w-4xl mx-auto px-4 py-12 space-y-6">
 
         {/* 1. Introduction */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-bold text-gray-800">1. Introduction</h2>
           </div>
           <p className="text-gray-600 leading-relaxed">
-            LabourMatch ("we", "our" or "the Platform") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store and protect your personal information when you use our platform. By using LabourMatch, you agree to the practices described in this policy.
+            LabourMatch is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store and protect your personal information when you use our platform. By using LabourMatch, you agree to the practices described in this policy.
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
           </div>
         </div>
 
-        {/* 3. How We Use Your Information */}
+        {/* 3. How We Use */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -86,7 +86,7 @@ export default function PrivacyPolicy() {
           </ul>
         </div>
 
-        {/* 4. Project Records & Dispute Resolution */}
+        {/* 4. Project Records */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -94,13 +94,11 @@ export default function PrivacyPolicy() {
             </div>
             <h2 className="text-xl font-bold text-gray-800">4. Project Records & Customer Protection</h2>
           </div>
-          <p className="text-gray-600 leading-relaxed mb-4">
-            To protect customers, LabourMatch maintains records of projects initiated through the platform. These records include:
-          </p>
+          <p className="text-gray-600 mb-4">To protect customers, LabourMatch maintains records of projects initiated through the platform:</p>
           <div className="space-y-3 mb-4">
             {[
               { title: "Professional Details", desc: "Name, verified status and contact information of the service provider." },
-              { title: "Scope of Work", desc: "What service was agreed upon, the quotation amount and project timeline." },
+              { title: "Scope of Work", desc: "What service was agreed upon, quotation amount and project timeline." },
               { title: "Project Progress", desc: "Updates and status of the project as reported through the platform." },
               { title: "Complaint & Dispute Records", desc: "Any complaints raised by customers regarding a professional or project." },
             ].map((item, i) => (
@@ -125,7 +123,7 @@ export default function PrivacyPolicy() {
           </div>
         </div>
 
-        {/* 5. Service Provider Commission */}
+        {/* 5. Commission */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -137,7 +135,7 @@ export default function PrivacyPolicy() {
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
               <p className="font-semibold text-gray-800 text-sm mb-1">8% Commission</p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Service providers agree to pay 8% commission to LabourMatch on every project or booking received through the platform. This information is shared with service providers during registration and is part of their agreement with LabourMatch.
+                Service providers agree to pay 8% commission to LabourMatch on every project or booking received through the platform. This is agreed upon during registration.
               </p>
             </div>
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
@@ -157,12 +155,10 @@ export default function PrivacyPolicy() {
             </div>
             <h2 className="text-xl font-bold text-gray-800">6. Data Sharing & Third Parties</h2>
           </div>
-          <p className="text-gray-600 leading-relaxed mb-3">
-            We do not sell your personal data to third parties. We may share your information only in the following cases:
-          </p>
+          <p className="text-gray-600 mb-3">We do not sell your personal data. We may share your information only in these cases:</p>
           <ul className="space-y-2 text-sm text-gray-600">
             {[
-              "With service providers when you make a booking (your contact details are shared to facilitate the service).",
+              "With service providers when you make a booking (contact details shared to facilitate the service).",
               "With payment processors (Razorpay) for secure payment handling.",
               "With cloud storage services (Cloudinary) for media storage.",
               "When required by law or to protect the rights and safety of our users.",
@@ -175,7 +171,7 @@ export default function PrivacyPolicy() {
           </ul>
         </div>
 
-        {/* 7. Data Security */}
+        {/* 7. Security */}
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -184,7 +180,7 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-bold text-gray-800">7. Data Security</h2>
           </div>
           <p className="text-gray-600 leading-relaxed">
-            We implement appropriate technical and security measures to protect your personal data from unauthorized access, loss or misuse. Passwords are encrypted and stored securely. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.
+            We implement appropriate technical and security measures to protect your personal data from unauthorized access, loss or misuse. Passwords are encrypted and stored securely. No method of transmission over the internet is 100% secure.
           </p>
         </div>
 
@@ -221,14 +217,14 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-bold text-gray-800">9. Changes to This Policy</h2>
           </div>
           <p className="text-gray-600 leading-relaxed">
-            LabourMatch may update this Privacy Policy from time to time. We will notify users of significant changes via email or platform notification. Continued use of the platform after changes are posted constitutes acceptance of the updated policy.
+            LabourMatch may update this Privacy Policy from time to time. We will notify users of significant changes. Continued use of the platform after changes constitutes acceptance of the updated policy.
           </p>
         </div>
 
         {/* Contact */}
         <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center">
           <h3 className="font-bold text-gray-800 mb-2">Questions about your Privacy?</h3>
-          <p className="text-gray-500 text-sm mb-4">Contact us and we'll be happy to help.</p>
+          <p className="text-gray-500 text-sm mb-4">Contact us and we will be happy to help.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center text-sm">
             <a href="mailto:labourmatch91@gmail.com" className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-semibold hover:opacity-90">
               labourmatch91@gmail.com
