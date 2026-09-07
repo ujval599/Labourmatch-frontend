@@ -1,203 +1,241 @@
-// src/app/pages/PrivacyPolicy.tsx
-import { Shield, Eye, Lock, Database, Bell, Mail, Phone, ChevronRight } from "lucide-react";
-
-const sections = [
-  {
-    icon: Database,
-    title: "Information We Collect",
-    content: [
-      {
-        subtitle: "Personal Information",
-        text: "When you register on LabourMatch, we collect your name, phone number, email address, and location. This information is necessary to create your account and provide our services."
-      },
-      {
-        subtitle: "Contractor Information",
-        text: "Contractors additionally provide business details including work category, pricing, experience, and profile photos/videos to help users find the right match."
-      },
-      {
-        subtitle: "Usage Data",
-        text: "We automatically collect information about how you use our platform, including pages visited, search queries, and interactions with contractor profiles."
-      }
-    ]
-  },
-  {
-    icon: Eye,
-    title: "How We Use Your Information",
-    content: [
-      {
-        subtitle: "Service Delivery",
-        text: "We use your information to connect users with contractors, process bookings, enable messaging between parties, and provide customer support."
-      },
-      {
-        subtitle: "Verification & Safety",
-        text: "Contractor information is used to verify identities, ensure platform safety, and maintain the quality of services offered on LabourMatch."
-      },
-      {
-        subtitle: "Communications",
-        text: "We may send you OTP messages, booking confirmations, and important service updates via SMS or email. You can manage notification preferences in your account settings."
-      },
-      {
-        subtitle: "Platform Improvement",
-        text: "Aggregated usage data helps us improve our search algorithms, user interface, and overall platform experience."
-      }
-    ]
-  },
-  {
-    icon: Lock,
-    title: "Data Security",
-    content: [
-      {
-        subtitle: "Encryption",
-        text: "All sensitive data including passwords are encrypted using industry-standard bcrypt hashing. Data transmission is secured via HTTPS encryption."
-      },
-      {
-        subtitle: "Access Controls",
-        text: "Access to personal data is strictly limited to authorized personnel on a need-to-know basis. We regularly audit access logs and permissions."
-      },
-      {
-        subtitle: "Data Retention",
-        text: "We retain your data as long as your account is active. Upon account deletion, your personal data is permanently removed within 30 days, except where retention is required by law."
-      }
-    ]
-  },
-  {
-    icon: Bell,
-    title: "Sharing of Information",
-    content: [
-      {
-        subtitle: "With Contractors/Users",
-        text: "To facilitate bookings and communications, relevant contact information is shared between users and contractors. Contractors' public profiles including name, phone, and work details are visible to all users."
-      },
-      {
-        subtitle: "Third-Party Services",
-        text: "We use trusted third-party services for OTP delivery (SMS), email notifications, and payment processing. These partners are bound by strict data protection agreements."
-      },
-      {
-        subtitle: "Legal Requirements",
-        text: "We may disclose information if required by law, court order, or government authority, or to protect the rights and safety of LabourMatch users."
-      }
-    ]
-  },
-  {
-    icon: Shield,
-    title: "Your Rights",
-    content: [
-      {
-        subtitle: "Access & Correction",
-        text: "You have the right to access and correct your personal information at any time through your account settings or by contacting our support team."
-      },
-      {
-        subtitle: "Data Deletion",
-        text: "You can request deletion of your account and associated data by contacting us. We will process deletion requests within 30 days."
-      },
-      {
-        subtitle: "Opt-Out",
-        text: "You may opt out of promotional communications at any time. Note that service-related communications (OTPs, booking confirmations) cannot be disabled as they are essential for platform functionality."
-      }
-    ]
-  }
-];
+// src/app/pages/Privacypolicy.tsx
+import { Shield, Eye, Lock, Bell, Users, FileText, CheckCircle, AlertTriangle } from "lucide-react";
 
 export default function PrivacyPolicy() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-primary via-primary/90 to-secondary py-16 px-4">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-primary to-secondary text-white py-14 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Shield className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">Privacy Policy</h1>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto">
-            Your privacy matters to us. This policy explains how LabourMatch collects, uses, and protects your personal information.
-          </p>
-          <p className="text-white/60 text-sm mt-4">Last updated: April 2026</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Privacy Policy</h1>
+          <p className="opacity-85 text-lg">Your privacy is important to us. Here's how we protect your data.</p>
+          <p className="opacity-70 text-sm mt-2">Last updated: January 2025</p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
 
-        {/* Intro */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8 shadow-sm">
-          <p className="text-gray-600 leading-relaxed">
-            Welcome to <strong>LabourMatch</strong>. We are committed to protecting your personal information and your right to privacy.
-            This Privacy Policy describes how we collect, use, and share information about you when you use our platform to find or offer labour contractor services across India.
-            By using LabourMatch, you agree to the collection and use of information in accordance with this policy.
-          </p>
-        </div>
-
-        {/* Sections */}
-        <div className="space-y-6">
-          {sections.map((section, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
-              {/* Section Header */}
-              <div className="flex items-center gap-4 p-6 border-b border-gray-50 bg-gradient-to-r from-gray-50 to-white">
-                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <section.icon className="h-5 w-5 text-primary" />
-                </div>
-                <h2 className="text-xl font-bold text-gray-800">{idx + 1}. {section.title}</h2>
-              </div>
-
-              {/* Section Content */}
-              <div className="p-6 space-y-5">
-                {section.content.map((item, i) => (
-                  <div key={i} className="flex gap-3">
-                    <ChevronRight className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-gray-700 mb-1">{item.subtitle}</h3>
-                      <p className="text-gray-500 text-sm leading-relaxed">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* 1. Introduction */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <FileText className="h-5 w-5 text-primary" />
             </div>
-          ))}
-        </div>
-
-        {/* Cookies */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">6. Cookies & Tracking</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            LabourMatch uses session tokens (JWT) for authentication purposes. We do not use tracking cookies for advertising.
-            Local storage is used to maintain your login session and role preferences. You can clear this data through your browser settings,
-            though doing so will log you out of the platform.
+            <h2 className="text-xl font-bold text-gray-800">1. Introduction</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            LabourMatch ("we", "our" or "the Platform") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store and protect your personal information when you use our platform. By using LabourMatch, you agree to the practices described in this policy.
           </p>
         </div>
 
-        {/* Children */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">7. Children's Privacy</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            LabourMatch is not intended for use by individuals under the age of 18. We do not knowingly collect personal information
-            from minors. If you believe we have collected information from a minor, please contact us immediately and we will take
-            steps to delete such information.
+        {/* 2. Information We Collect */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Eye className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">2. Information We Collect</h2>
+          </div>
+          <div className="space-y-4">
+            <div>
+              <p className="font-semibold text-gray-700 mb-2">For Customers:</p>
+              <ul className="space-y-1.5 text-sm text-gray-600">
+                {["Name, phone number and email address", "Location and project details", "Booking and communication history", "Reviews and ratings submitted"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2"><CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" /><span>{item}</span></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-700 mb-2">For Service Providers:</p>
+              <ul className="space-y-1.5 text-sm text-gray-600">
+                {["Name, phone number, email and location", "Business details, category and experience", "Profile photos and work media", "Project records including quotations and progress", "Verification documents and status"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2"><CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" /><span>{item}</span></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. How We Use Your Information */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Bell className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">3. How We Use Your Information</h2>
+          </div>
+          <ul className="space-y-2 text-sm text-gray-600">
+            {[
+              "To create and manage your account on the platform.",
+              "To connect customers with verified service providers.",
+              "To process bookings and facilitate communication.",
+              "To maintain project records for dispute resolution purposes.",
+              "To verify service providers before listing them on the platform.",
+              "To send important notifications about bookings, updates and account activity.",
+              "To improve our platform, services and user experience.",
+              "To ensure platform safety and prevent fraud.",
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 4. Project Records & Dispute Resolution */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Shield className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">4. Project Records & Customer Protection</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            To protect customers, LabourMatch maintains records of projects initiated through the platform. These records include:
+          </p>
+          <div className="space-y-3 mb-4">
+            {[
+              { title: "Professional Details", desc: "Name, verified status and contact information of the service provider." },
+              { title: "Scope of Work", desc: "What service was agreed upon, the quotation amount and project timeline." },
+              { title: "Project Progress", desc: "Updates and status of the project as reported through the platform." },
+              { title: "Complaint & Dispute Records", desc: "Any complaints raised by customers regarding a professional or project." },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle className="h-3.5 w-3.5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 text-sm">{item.title}</p>
+                  <p className="text-gray-500 text-sm">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
+              <p className="text-gray-500 text-sm leading-relaxed">
+                These records are used solely for dispute resolution and platform safety. LabourMatch does not guarantee automatic refunds but commits to reviewing disputes fairly based on available information.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 5. Service Provider Commission */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">5. Service Provider Commission & Obligations</h2>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
+              <p className="font-semibold text-gray-800 text-sm mb-1">8% Commission</p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Service providers agree to pay 8% commission to LabourMatch on every project or booking received through the platform. This information is shared with service providers during registration and is part of their agreement with LabourMatch.
+              </p>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <p className="font-semibold text-gray-800 text-sm mb-1">Work Completion Obligation</p>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Service providers who accept a project through LabourMatch are obligated to complete it. Abandoning accepted work midway is a violation of platform terms and may result in suspension or removal.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 6. Data Sharing */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Lock className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">6. Data Sharing & Third Parties</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed mb-3">
+            We do not sell your personal data to third parties. We may share your information only in the following cases:
+          </p>
+          <ul className="space-y-2 text-sm text-gray-600">
+            {[
+              "With service providers when you make a booking (your contact details are shared to facilitate the service).",
+              "With payment processors (Razorpay) for secure payment handling.",
+              "With cloud storage services (Cloudinary) for media storage.",
+              "When required by law or to protect the rights and safety of our users.",
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 7. Data Security */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Lock className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">7. Data Security</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            We implement appropriate technical and security measures to protect your personal data from unauthorized access, loss or misuse. Passwords are encrypted and stored securely. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.
           </p>
         </div>
 
-        {/* Changes */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 mt-6 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">8. Changes to This Policy</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            We may update this Privacy Policy from time to time. We will notify you of any significant changes by posting the new
-            policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically.
+        {/* 8. Your Rights */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">8. Your Rights</h2>
+          </div>
+          <ul className="space-y-2 text-sm text-gray-600">
+            {[
+              "Access and review the personal data we hold about you.",
+              "Request correction of inaccurate information.",
+              "Request deletion of your account and associated data.",
+              "Opt out of non-essential communications.",
+              "Raise a complaint or dispute regarding a project or service provider.",
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 9. Changes */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">9. Changes to This Policy</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            LabourMatch may update this Privacy Policy from time to time. We will notify users of significant changes via email or platform notification. Continued use of the platform after changes are posted constitutes acceptance of the updated policy.
           </p>
         </div>
 
         {/* Contact */}
-        <div className="bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20 rounded-2xl p-6 mt-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Contact Us</h2>
-          <p className="text-gray-600 text-sm mb-4">
-            If you have any questions about this Privacy Policy or our data practices, please contact us:
-          </p>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <Mail className="h-4 w-4 text-primary" />
-              <span>privacy@labourmatch.in</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <Phone className="h-4 w-4 text-primary" />
-              <span>+91 8128860779</span>
-            </div>
+        <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-800 mb-2">Questions about your Privacy?</h3>
+          <p className="text-gray-500 text-sm mb-4">Contact us and we'll be happy to help.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center text-sm">
+            <a href="mailto:labourmatch91@gmail.com" className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-semibold hover:opacity-90">
+              labourmatch91@gmail.com
+            </a>
+            <a href="tel:+918128860779" className="flex items-center justify-center gap-2 border-2 border-primary text-primary px-5 py-2.5 rounded-xl font-semibold hover:bg-primary/5">
+              +91 8128860779
+            </a>
           </div>
         </div>
 

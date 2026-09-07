@@ -1,223 +1,244 @@
-// src/app/pages/TermsAndConditions.tsx
-import { FileText, Users, HardHat, AlertTriangle, CreditCard, Scale, Phone, Mail, ChevronRight } from "lucide-react";
-
-const sections = [
-  {
-    icon: Users,
-    title: "User Accounts & Registration",
-    items: [
-      "You must be at least 18 years of age to create an account on LabourMatch.",
-      "You are responsible for maintaining the confidentiality of your account credentials.",
-      "You agree to provide accurate, current, and complete information during registration.",
-      "You must notify us immediately of any unauthorized use of your account.",
-      "One person may not maintain more than one active user account.",
-      "LabourMatch reserves the right to suspend or terminate accounts that violate these terms."
-    ]
-  },
-  {
-    icon: HardHat,
-    title: "Contractor Registration & Services",
-    items: [
-      "Contractors must provide accurate information about their services, experience, and pricing.",
-      "All contractor profiles are subject to review and verification by LabourMatch administrators.",
-      "Contractors are responsible for the quality and safety of services they provide.",
-      "Profile activation may take 24-48 hours after registration for verification purposes.",
-      "Contractors must maintain valid identification and necessary licenses for their work category.",
-      "Premium listings and sponsored placements are available through our premium plans.",
-      "LabourMatch reserves the right to remove contractor profiles that receive consistent negative feedback.",
-      "Contractors must complete any work assignment accepted through the platform. Leaving work incomplete or abandoning a project midway is a serious violation of these terms.",
-      "If a contractor abandons or incompletely performs a job obtained through LabourMatch, a penalty may be imposed. This penalty is payable to both LabourMatch and the affected client as determined by the company.",
-      "LabourMatch reserves the right to suspend or permanently ban contractor accounts in case of repeated work abandonment or client complaints regarding incomplete services."
-    ]
-  },
-  {
-    icon: Scale,
-    title: "Platform Usage Rules",
-    items: [
-      "You agree not to use LabourMatch for any unlawful or prohibited activities.",
-      "You must not post false, misleading, or fraudulent information on the platform.",
-      "Harassment, abuse, or threatening behavior toward other users is strictly prohibited.",
-      "You must not attempt to bypass or manipulate the platform's rating and review system.",
-      "Scraping, crawling, or automated access to the platform without permission is prohibited.",
-      "You must not use the platform to spam other users with unsolicited communications.",
-      "Any attempt to hack, reverse engineer, or compromise platform security will result in immediate termination."
-    ]
-  },
-  {
-    icon: CreditCard,
-    title: "Payments & Premium Plans",
-    items: [
-      "Premium plan fees are non-refundable once the service period has commenced.",
-      "Contractors are responsible for providing proof of payment for premium plan activation.",
-      "LabourMatch does not process direct payments between users and contractors.",
-      "All financial transactions between users and contractors are independent of LabourMatch.",
-      "Premium plan pricing is subject to change with 30 days advance notice.",
-      "Disputes regarding payments to contractors must be resolved directly between the parties."
-    ]
-  },
-  {
-    icon: AlertTriangle,
-    title: "Disclaimer & Limitation of Liability",
-    items: [
-      "LabourMatch is a marketplace platform and does not directly employ any contractors.",
-      "We do not guarantee the quality, safety, or legality of services offered by contractors.",
-      "LabourMatch is not liable for any disputes, damages, or losses arising from contractor-user interactions.",
-      "The platform is provided 'as is' without warranties of any kind, express or implied.",
-      "We are not responsible for any loss of data, revenue, or business opportunities.",
-      "Our maximum liability to you shall not exceed the amount paid by you to LabourMatch in the past 12 months.",
-      "We reserve the right to modify or discontinue services without prior notice."
-    ]
-  },
-  {
-    icon: FileText,
-    title: "Reviews & Content",
-    items: [
-      "By submitting reviews, you grant LabourMatch a non-exclusive license to display your content.",
-      "Reviews must be honest, based on actual experiences, and free from defamatory content.",
-      "LabourMatch reserves the right to remove reviews that violate our content guidelines.",
-      "You are solely responsible for the content you post on the platform.",
-      "Fake reviews, whether positive or negative, are strictly prohibited and may result in account suspension.",
-      "Profile photos and work media uploaded must be your own original content."
-    ]
-  }
-];
+// src/app/pages/Termsandconditions.tsx
+import { Shield, AlertTriangle, FileText, Users, Scale, Clock, CheckCircle } from "lucide-react";
 
 export default function TermsAndConditions() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-700 py-16 px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-primary to-secondary text-white py-14 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <FileText className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-4">Terms & Conditions</h1>
-          <p className="text-white/85 text-lg max-w-2xl mx-auto">
-            Please read these terms carefully before using LabourMatch. By accessing our platform, you agree to be bound by these terms.
-          </p>
-          <p className="text-white/60 text-sm mt-4">Last updated: April 2026 • Effective immediately</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3">Terms & Conditions</h1>
+          <p className="opacity-85 text-lg">Please read these terms carefully before using LabourMatch.</p>
+          <p className="opacity-70 text-sm mt-2">Last updated: January 2025</p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
 
-        {/* Agreement Banner */}
-        <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5 mb-8 flex items-start gap-4">
-          <AlertTriangle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
-          <p className="text-teal-800 text-sm leading-relaxed">
-            <strong>Important:</strong> By creating an account or using LabourMatch services, you acknowledge that you have read,
-            understood, and agree to be bound by these Terms & Conditions and our Privacy Policy. If you do not agree,
-            please do not use our platform.
+        {/* 1. Acceptance */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <CheckCircle className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">1. Acceptance of Terms</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            By accessing or using LabourMatch ("the Platform"), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services. These terms apply to all users including customers, service providers (contractors), and visitors.
           </p>
         </div>
 
-        {/* Work Completion Warning Banner */}
-        <div className="bg-white border border-teal-300 rounded-2xl p-5 mb-8 flex items-start gap-4 shadow-sm">
-          <AlertTriangle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-teal-800 text-sm font-bold mb-1">⚠️ All Service Providers — Work Completion Policy</p>
-            <p className="text-teal-700 text-sm leading-relaxed">
-              Any service provider who abandons or incompletely performs work obtained through LabourMatch may face a <strong>penalty</strong> payable to LabourMatch and the affected client. Repeated violations will result in permanent account suspension.
-            </p>
+        {/* 2. About LabourMatch */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">2. About LabourMatch</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            LabourMatch is a marketplace platform that connects customers with verified service providers (contractors) including construction workers, plumbers, electricians, carpenters, interior designers, and other skilled professionals. LabourMatch acts as an intermediary and is not directly responsible for the quality or outcome of services provided.
+          </p>
+        </div>
+
+        {/* 3. Service Provider Terms */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Scale className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">3. Service Provider Terms</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            By registering as a service provider on LabourMatch, you agree to the following terms:
+          </p>
+          <div className="space-y-4">
+
+            {/* Commission */}
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4">
+              <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span className="text-primary">💼</span> Commission Policy
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                For every project or booking received through LabourMatch, service providers agree to pay <strong>8% commission</strong> to LabourMatch on the total project value. This commission applies to all work leads and bookings facilitated through the platform. The commission is due upon project completion or as agreed with the LabourMatch team.
+              </p>
+            </div>
+
+            {/* Work Completion */}
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span>⚠️</span> Work Completion Obligation
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Once a service provider accepts a project or booking through LabourMatch, they are <strong>obligated to complete the work</strong>. Abandoning a project midway is strictly prohibited. If a service provider has accepted a project, they must see it through to completion. Repeated abandonment of projects may result in suspension or permanent removal from the platform.
+              </p>
+            </div>
+
+            {/* Verification */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span>✅</span> Verification Requirement
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                All service providers must complete LabourMatch's verification process before their profile is listed on the platform. Verification is <strong>mandatory for all professionals</strong> and is not a paid feature. Subscription plans provide additional visibility only — they do not replace or bypass verification.
+              </p>
+            </div>
+
+            {/* Professional Conduct */}
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span>👷</span> Professional Conduct
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Service providers must maintain professional conduct at all times, provide accurate information about their services, qualifications and experience, and treat customers with respect. Any fraudulent, misleading or unprofessional behavior may result in immediate removal from the platform.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Intro */}
-        <div className="bg-white rounded-2xl border border-teal-100 p-6 mb-8 shadow-sm">
-          <p className="text-gray-600 leading-relaxed">
-            These Terms & Conditions ("Terms") govern your use of the <strong>LabourMatch</strong> platform, including our website,
-            mobile application, and all related services. LabourMatch operates as an online marketplace connecting individuals
-            seeking labour services ("Users") with skilled contractors ("Contractors") across India.
-            These Terms constitute a legally binding agreement between you and LabourMatch.
+        {/* 4. Customer Protection */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Shield className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">4. Customer Protection Policy</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            LabourMatch is committed to protecting customers. The following measures are in place:
           </p>
-        </div>
-
-        {/* Sections */}
-        <div className="space-y-6">
-          {sections.map((section, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-teal-100 overflow-hidden shadow-sm">
-              <div className="flex items-center gap-4 p-6 border-b border-teal-50 bg-gradient-to-r from-teal-50 to-white">
-                <div className="w-10 h-10 bg-teal-600/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <section.icon className="h-5 w-5 text-teal-700" />
+          <div className="space-y-3">
+            {[
+              {
+                title: "Professional Verification",
+                desc: "LabourMatch verifies all service providers before listing them on the platform to ensure customers connect with legitimate professionals.",
+              },
+              {
+                title: "Project Record Keeping",
+                desc: "When a customer initiates a project through LabourMatch, important details are recorded — including the professional's name, scope of work, quotation amount and project progress.",
+              },
+              {
+                title: "Dispute Resolution",
+                desc: "If any problem arises during a project, customers can raise a complaint or dispute on LabourMatch. Our team will review the matter based on available information and project records.",
+              },
+              {
+                title: "Professional Accountability",
+                desc: "If a professional receives repeated serious or genuine complaints, LabourMatch reserves the right to suspend or permanently remove them from the platform.",
+              },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <CheckCircle className="h-3.5 w-3.5 text-primary" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-800">{idx + 1}. {section.title}</h2>
+                <div>
+                  <p className="font-semibold text-gray-800 text-sm">{item.title}</p>
+                  <p className="text-gray-500 text-sm mt-0.5">{item.desc}</p>
+                </div>
               </div>
-              <div className="p-6">
-                <ul className="space-y-3">
-                  {section.items.map((item, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <ChevronRight className={`h-4 w-4 mt-0.5 flex-shrink-0 ${
-                        // Highlight penalty clauses
-                        item.includes("penalty") || item.includes("abandon") || item.includes("incomplete")
-                          ? "text-teal-600"
-                          : "text-teal-400"
-                      }`} />
-                      <p className={`text-sm leading-relaxed ${
-                        item.includes("penalty") || item.includes("abandon") || item.includes("incomplete")
-                          ? "text-teal-700 font-medium"
-                          : "text-gray-500"
-                      }`}>{item}</p>
-                    </li>
-                  ))}
-                </ul>
+            ))}
+          </div>
+
+          {/* Important Disclaimer */}
+          <div className="mt-5 bg-gray-50 border border-gray-200 rounded-xl p-4">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-gray-700 text-sm mb-1">Important Notice</p>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  LabourMatch does not guarantee automatic refunds or financial compensation if something goes wrong. Our commitment is to provide verification, project records, a dispute mechanism and professional accountability — and to continue strengthening these protections over time.
+                </p>
               </div>
             </div>
-          ))}
+          </div>
         </div>
 
-        {/* Governing Law */}
-        <div className="bg-white rounded-2xl border border-teal-100 p-6 mt-6 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">7. Governing Law & Disputes</h2>
-          <p className="text-gray-500 text-sm leading-relaxed mb-3">
-            These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising from these
-            Terms or your use of LabourMatch shall be subject to the exclusive jurisdiction of the courts in Gujarat, India.
+        {/* 5. Subscription Plans */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Clock className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">5. Subscription Plans</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed mb-3">
+            LabourMatch offers optional subscription plans (Basic, Standard, Premium) for service providers who wish to increase their visibility and access more lead opportunities.
           </p>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            We encourage you to first contact our support team to resolve any disputes amicably before pursuing legal action.
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li className="flex items-start gap-2"><CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" /><span>Subscription plans provide <strong>enhanced visibility and lead opportunities</strong> — they do not guarantee bookings or a top ranking in search results.</span></li>
+            <li className="flex items-start gap-2"><CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" /><span>Lead opportunities are subject to customer demand, location and service relevance.</span></li>
+            <li className="flex items-start gap-2"><CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" /><span>Subscription payments are non-refundable once activated.</span></li>
+            <li className="flex items-start gap-2"><CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" /><span>Verification remains mandatory for all professionals and cannot be purchased.</span></li>
+          </ul>
+        </div>
+
+        {/* 6. User Responsibilities */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">6. User Responsibilities</h2>
+          </div>
+          <ul className="space-y-2 text-sm text-gray-600">
+            {[
+              "Provide accurate and truthful information when registering or creating a profile.",
+              "Do not use the platform for any fraudulent, illegal or misleading activity.",
+              "Respect other users — both customers and service providers.",
+              "Do not share your account credentials with others.",
+              "Report any suspicious activity or policy violations to LabourMatch.",
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 7. Limitation of Liability */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <AlertTriangle className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">7. Limitation of Liability</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            LabourMatch is a marketplace platform and acts as an intermediary between customers and service providers. We are not liable for the quality, safety or outcome of services rendered by professionals listed on our platform. While we take steps to verify professionals and maintain records, final responsibility for the service delivery lies with the service provider.
           </p>
         </div>
 
-        {/* Termination */}
-        <div className="bg-white rounded-2xl border border-teal-100 p-6 mt-6 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">8. Termination</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            LabourMatch reserves the right to terminate or suspend your account at any time, with or without notice, for conduct
-            that we believe violates these Terms or is harmful to other users, LabourMatch, third parties, or for any other reason
-            at our sole discretion. Upon termination, your right to use the platform will immediately cease.
-          </p>
-        </div>
-
-        {/* Changes */}
-        <div className="bg-white rounded-2xl border border-teal-100 p-6 mt-6 shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">9. Changes to Terms</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            We reserve the right to modify these Terms at any time. We will provide notice of significant changes by updating
-            the date at the top of this page. Your continued use of LabourMatch after changes constitutes acceptance of the
-            revised Terms. We recommend reviewing these Terms periodically.
+        {/* 8. Changes to Terms */}
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-800">8. Changes to Terms</h2>
+          </div>
+          <p className="text-gray-600 leading-relaxed">
+            LabourMatch reserves the right to update or modify these Terms and Conditions at any time. Continued use of the platform after changes are posted constitutes acceptance of the updated terms. We recommend checking this page periodically for updates.
           </p>
         </div>
 
         {/* Contact */}
-        <div className="bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-700 rounded-2xl p-8 mt-6">
-          <h2 className="text-xl font-bold text-white mb-4">Contact & Support</h2>
-          <p className="text-white/75 text-sm mb-4">
-            For questions about these Terms & Conditions, please contact our legal team:
-          </p>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 text-sm text-white/85">
-              <Mail className="h-4 w-4 text-white/70" />
-              <span>labourmatch91@gmail.com</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-white/85">
-              <Phone className="h-4 w-4 text-white/70" />
-              <span>+91 8128860779</span>
-            </div>
+        <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center">
+          <h3 className="font-bold text-gray-800 mb-2">Questions about our Terms?</h3>
+          <p className="text-gray-500 text-sm mb-4">Contact us and we'll be happy to help.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center text-sm">
+            <a href="mailto:labourmatch91@gmail.com" className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-semibold hover:opacity-90">
+              labourmatch91@gmail.com
+            </a>
+            <a href="tel:+918128860779" className="flex items-center justify-center gap-2 border-2 border-primary text-primary px-5 py-2.5 rounded-xl font-semibold hover:bg-primary/5">
+              +91 8128860779
+            </a>
           </div>
         </div>
 
       </div>
     </div>
   );
-} 
- 
- 
+}
