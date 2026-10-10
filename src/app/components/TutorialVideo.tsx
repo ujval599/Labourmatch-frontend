@@ -21,7 +21,7 @@ const TutorialVideo: React.FC = () => {
   return (
     <div className="fixed bottom-4 right-4 z-50 shadow-2xl rounded-xl overflow-hidden" style={{ width: "320px" }}>
       <div className="bg-gray-900 flex items-center justify-between px-3 py-2">
-        <span className="text-white text-sm font-medium">?? LabourMatch kaise use karein</span>
+        <span className="text-white text-sm font-medium">?? How to Register Your Service</span>
         <button onClick={handleClose} className="text-gray-400 hover:text-white text-lg leading-none">?</button>
       </div>
       <div style={{ height: "180px" }}>
