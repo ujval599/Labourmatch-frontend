@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { AuthProvider } from "../context/AuthContext";
+import TutorialVideo from "./components/TutorialVideo";
 
 export default function Root() {
   return (
@@ -12,6 +13,7 @@ export default function Root() {
           <Outlet />
         </main>
         <Footer />
+        <TutorialVideo />
       </div>
     </AuthProvider>
   );
